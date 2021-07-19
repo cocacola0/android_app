@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fg_produce_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fg_clienti">
+
+    <ListView
+        android:id="@+id/lst_prod"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_above="@id/ll_buttons_client"/>
+
+    <LinearLayout
+        android:id="@+id/ll_buttons_client"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_adauga_client"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/adauga_client"
+            android:textSize="12sp"
+            android:padding="10dip"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_sterge_client"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/sterge_client"
+            android:textSize="12sp"
+            android:padding="10dip"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_modifica_client"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/modifica_client"
+            android:textSize="12sp"
+            android:padding="10dip"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+</RelativeLayout>

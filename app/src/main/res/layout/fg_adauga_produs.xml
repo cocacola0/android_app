@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fg_adauga_produs">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/ll_edtxt_produs">
+
+        <EditText
+            android:id="@+id/etxt_nume"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            android:hint="@string/nume"
+            android:layout_margin="10dp"/>
+
+        <EditText
+            android:id="@+id/etxt_cod"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            android:hint="@string/cod"
+            android:layout_margin="10dp"/>
+
+        <EditText
+            android:id="@+id/etxt_pret"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            android:hint="@string/pret"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/txt_incarca_imagine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/incarca_imagine"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="500dp"
+            android:minHeight="300dp"
+            android:id="@+id/imgw_prod"/>
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/btn_adauga_produs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/adauga"
+        android:textSize="20sp"
+        android:padding="20dip"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

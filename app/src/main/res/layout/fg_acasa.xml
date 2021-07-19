@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fg_acasa">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="3">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btn_oferte"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/oferte"
+                android:textSize="20sp"
+                android:padding="3dip"
+                android:layout_margin="10dp"/>
+
+            <Button
+                android:id="@+id/btn_facturi"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/facturi"
+                android:textSize="20sp"
+                android:padding="3dip"
+                android:layout_margin="10dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btn_produse"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/produse"
+                android:textSize="20sp"
+                android:padding="3dip"
+                android:layout_margin="10dp" />
+
+            <Button
+                android:id="@+id/btn_rapoarte"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/rapoarte"
+                android:textSize="20sp"
+                android:padding="3dip"
+                android:layout_margin="10dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btn_clienti"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/clienti"
+                android:textSize="20sp"
+                android:padding="3dip"
+                android:layout_margin="10dp"/>
+
+            <Button
+                android:id="@+id/btn_furnizori"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/furnizori"
+                android:textSize="20sp"
+                android:padding="3dip"
+                android:layout_margin="10dp"/>
+        </TableRow>
+
+    </TableLayout>
+
+
+</FrameLayout>

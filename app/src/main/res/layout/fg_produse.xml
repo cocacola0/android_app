@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fg_produce_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/lst_prod_produse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_adauga_produse"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/adauga_produs"
+            android:textSize="12sp"
+            android:padding="10dip"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_sterge_produse"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/sterge_produs"
+            android:textSize="12sp"
+            android:padding="10dip"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_modifica_produse"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/modifica_produs"
+            android:textSize="12sp"
+            android:padding="10dip"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

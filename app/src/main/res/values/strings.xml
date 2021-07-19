@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Deviz</string>
+
+    <string name="oferte">Oferte</string>
+    <string name="facturi">Facturi</string>
+    <string name="produse">Produse</string>
+    <string name="rapoarte">Rapoarte</string>
+    <string name="clienti">Clienți</string>
+    <string name="furnizori">Furnizori</string>
+
+
+    <string name="adauga_produs">Adaugă produs</string>
+    <string name="sterge_produs">Șterge produs</string>
+    <string name="modifica_produs">Modifică produs</string>
+
+    <string name="adauga_client">Adaugă client</string>
+    <string name="sterge_client">Șterge client</string>
+    <string name="modifica_client">Modifică client</string>
+
+    <!-- adauga produs-->
+    <string name="nume">Nume</string>
+    <string name="cod">Cod</string>
+    <string name="pret">Pret</string>
+    <string name="incarca_imagine">Încarcă imagine:</string>
+    <string name="adauga">Adaugă</string>
+
+    <!-- adauga client-->
+    <string name="denumire">Denumire</string>
+    <string name="cif">CIF</string>
+    <string name="reg_com">Reg Com</string>
+    <string name="platitor_tva">Plătitor TVA</string>
+    <string name="localitate">Localitate</string>
+    <string name="judetul">Județul</string>
+    <string name="adresa">Adresa</string>
+    <string name="email">Email</string>
+    <string name="pers_contact">Pers Contact</string>
+    <string name="telefon">Telefon</string>
+    <string name="da">da</string>
+    <string name="nu">nu</string>
+
+    <string name="fragment_neimplementat">Fragment neimplemantat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
