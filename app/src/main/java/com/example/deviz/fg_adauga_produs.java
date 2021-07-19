@@ -109,42 +109,32 @@ public class fg_adauga_produs extends Fragment
         String nume = etxt_nume.getText().toString();
         String cod = etxt_cod.getText().toString();
         String str_pret = etxt_pret.getText().toString();
+        Bitmap bitmap;
         float pret;
 
-        if(nume.equals(""))
-        {
-            show_toast("Introduceți nume!");
-            return null;
-        }
+        Utils u = new Utils(getContext());
 
-        if(cod.equals(("")))
-        {
-            show_toast("Introduceți cod!");
-            return null;
-        }
+        if(u.check_string_non_empty(nume,"nume") && u.check_string_non_empty(cod,"cod") &&
+                u.check_string_non_empty(str_pret,"pret")) {
+            BitmapDrawable drawable;
 
-        if(str_pret.equals("")) {
-            show_toast("Introduceți pret!");
-            return null;
-        }
-        else
+            if(img_produs.getDrawable() != null)
+            {
+                drawable = (BitmapDrawable) img_produs.getDrawable();
+                bitmap = drawable.getBitmap();
+            }
+            else
+            {
+                show_toast("Selectează imagine!");
+                return null;
+            }
+
             pret = Float.parseFloat(str_pret);
 
-        BitmapDrawable drawable;
-        Bitmap bitmap;
-
-        if(img_produs.getDrawable() != null)
-        {
-            drawable = (BitmapDrawable) img_produs.getDrawable();
-            bitmap = drawable.getBitmap();
+            return new data_class_produs(nume, cod, pret, bitmap);
         }
         else
-        {
-            show_toast("Selectează imagine!");
             return null;
-        }
-
-        return new data_class_produs(nume, cod, pret, bitmap);
     }
 
     private void adauga_produs()

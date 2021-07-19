@@ -1,5 +1,6 @@
 package com.example.deviz;
 
+import android.content.ContentValues;
 import android.graphics.Bitmap;
 
 public class data_class_produs
@@ -56,5 +57,4 @@ public class data_class_produs
     {
         this.img = img;
     }
-
 }

@@ -2,13 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fg_produce_frame"
+    android:id="@+id/fg_clienti_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fg_clienti">
 
-    <ListView
-        android:id="@+id/lst_prod"
+    <ExpandableListView
+        android:id="@+id/exp_lst_clienti"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"

@@ -55,7 +55,6 @@ public class ProduseAdapter extends BaseAdapter
         txt_cod.setText(current_item.getCod());
         txt_pret.setText(Float.toString(current_item.getPret()));
 
-        Log.d("Adapter: pret = ", Float.toString(current_item.getPret()));
         return convertView;
     }
 }

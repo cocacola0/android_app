@@ -126,23 +126,6 @@ public class fg_produse extends Fragment
 
         lst_view.setAdapter(adapter);
 
-        lst_view.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                Log.d("OnItemSelected","Try to change background!");
-                View item = (View) parent.getItemAtPosition(position);
-                item.setBackgroundColor(Color.parseColor("#ADD8E6"));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
         lst_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)

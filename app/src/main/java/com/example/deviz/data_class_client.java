@@ -1,5 +1,7 @@
 package com.example.deviz;
 
+import android.content.ContentValues;
+
 public class data_class_client
 {
     private String denumire, cif, reg_com, localitate, judet, adresa, email, pers_contact, telefon;
@@ -99,5 +101,28 @@ public class data_class_client
 
     public void setPlatitor_tva(boolean platitor_tva) {
         this.platitor_tva = platitor_tva;
+    }
+
+    public ContentValues get_cv()
+    {
+        ContentValues item = new ContentValues();
+
+        item.put("denumire", denumire);
+        item.put("cif", cif);
+        item.put("reg_com", reg_com);
+        item.put("plat_tva", platitor_tva);
+        item.put("localitate", localitate);
+        item.put("judet", judet);
+        item.put("adresa", adresa);
+        item.put("email",email);
+        item.put("pers_contact", pers_contact);
+        item.put("telefon", telefon);
+
+        return item;
+    }
+
+    public int size_of()
+    {
+        return 10;
     }
 }

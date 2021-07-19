@@ -99,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/da"/>
 
+
             <CheckBox
                 android:id="@+id/plat_tva_nu"
                 android:layout_width="0dp"

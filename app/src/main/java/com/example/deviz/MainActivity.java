@@ -117,6 +117,26 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    protected void start_fg_with_args(String fg_name, data_class_client client)
+    {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setReorderingAllowed(false);
+
+        switch (fg_name)
+        {
+            case "modifica_client":
+                transaction.replace(R.id.layout_frame, new fg_adauga_client(client), null);
+                change_toolbar(R.string.modifica_client);
+                break;
+
+            default:
+                transaction.replace(R.id.layout_frame, fg_acasa.class, null);
+                change_toolbar(R.string.app_name);
+        }
+
+        transaction.commit();
+    }
     public void change_toolbar(int txt_resource)
     {
         TextView txt_toolbar = findViewById(R.id.txt_toolbar);
