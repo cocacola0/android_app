@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_contul_meu"
+        android:title="@string/contul_meu"/>
+
+    <item
+        android:id="@+id/menu_abonament"
+        android:title="@string/abonament"/>
+</menu>

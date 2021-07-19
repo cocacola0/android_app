@@ -69,7 +69,6 @@ public class fg_adauga_client extends Fragment
         String pers_contact = etxt_pers_contact.getText().toString();
         String telefon = etxt_telefon.getText().toString();
 
-
         Utils u = new Utils(getContext());
 
         if(u.check_string_non_empty(denumire, "denumire") && u.check_string_non_empty(cif, "cif") &&
@@ -158,6 +157,7 @@ public class fg_adauga_client extends Fragment
             }
         });
     }
+
     void init(View r_view)
     {
         etxt_denumire = r_view.findViewById(R.id.etxt_denumire);

@@ -13,4 +13,21 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="MenuItems">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="BigButton">
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">20dip</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="TextViewGetText">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>
