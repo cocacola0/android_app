@@ -271,6 +271,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         return null;
     }
 
+
     private byte[] convert_bitmap_to_bytearr(Bitmap img)
     {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

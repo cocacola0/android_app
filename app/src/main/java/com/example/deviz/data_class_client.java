@@ -2,6 +2,8 @@ package com.example.deviz;
 
 import android.content.ContentValues;
 
+import java.util.ArrayList;
+
 public class data_class_client
 {
     private String denumire, cif, reg_com, localitate, judet, adresa, email, pers_contact, telefon;
@@ -119,10 +121,5 @@ public class data_class_client
         item.put("telefon", telefon);
 
         return item;
-    }
-
-    public int size_of()
-    {
-        return 10;
     }
 }

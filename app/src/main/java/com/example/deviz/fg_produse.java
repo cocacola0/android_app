@@ -150,6 +150,4 @@ public class fg_produse extends Fragment
             }
         });
     }
-
-
 }

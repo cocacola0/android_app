@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case "facturi":
-                transaction.replace(R.id.layout_frame, fg_facturi.class, null);
+                transaction.replace(R.id.layout_frame, new fg_oferte(true), null);
                 change_toolbar(R.string.facturi);
                 break;
 

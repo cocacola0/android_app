@@ -47,12 +47,16 @@
     <string name="cota_tva">Cotă TVA</string>
     <string name="tip_tva">Tip TVA</string>
 
-    <!-- drawer layoyt-->
+    <!-- drawer layout-->
     <string name="nav_open">Deschide</string>
     <string name="nav_close">Închide</string>
     <string name="contul_meu">Contul meu</string>
     <string name="abonament">Abonament</string>
 
+    <!-- genereaza oferta-->
+    <string name="trimite_oferta">Trimite Ofertă</string>
+    <string name="selecteaza_client">Selectează client</string>
+    <string name="selecteaza_produs">Selectează produs</string>
 
     <string name="fragment_neimplementat">Fragment neimplemantat</string>
     <!-- TODO: Remove or change this placeholder text -->
