@@ -126,6 +126,7 @@ public class fg_contul_meu extends Fragment
 
     data_class_cont get_cont_info()
     {
+        String denumire = etxt_denumire.getText().toString();
         String cif = etxt_cif.getText().toString();
         String reg_com = etxt_reg_com.getText().toString();
         String cap_social = etxt_cap_social.getText().toString();
@@ -142,7 +143,7 @@ public class fg_contul_meu extends Fragment
 
         Utils u = new Utils(getContext());
 
-        if(u.check_string_non_empty(cif, "cif") && u.check_string_non_empty(reg_com, "reg com") &&
+        if(u.check_string_non_empty(denumire, "denumire") && u.check_string_non_empty(cif, "cif") && u.check_string_non_empty(reg_com, "reg com") &&
             u.check_string_non_empty(cap_social, "capital social") && u.check_string_non_empty(localitate, "localitate") &&
             u.check_string_non_empty(judet, "judet") && u.check_string_non_empty(adresa, "adresa") &&
             u.check_string_non_empty(cod_postal, "cod postal") && u.check_string_non_empty(telefon, "telefon") &&
@@ -150,7 +151,7 @@ public class fg_contul_meu extends Fragment
             u.check_string_non_empty(banca, "banca") && u.check_string_non_empty(cota_tva, "cota tva") &&
             u.check_string_non_empty(tip_tva, "tip tva") && (plat_tva_nu || plat_tva_da))
 
-            return new data_class_cont(cif, reg_com, cap_social, plat_tva_da, cap_social, localitate, judet, adresa, cod_postal, telefon, email, cont_bancar, banca, cota_tva, tip_tva);
+            return new data_class_cont(denumire, cif, reg_com, plat_tva_da, cap_social, localitate, judet, adresa, cod_postal, telefon, email, cont_bancar, banca, cota_tva, tip_tva);
 
         return null;
     }

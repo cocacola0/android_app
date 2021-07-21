@@ -63,21 +63,15 @@ public class ProduseOferteAdapter extends BaseAdapter {
 
         img_minus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                String new_txt = Integer.toString(Integer.parseInt(txt_buc.getText().toString())-1);
-
-                txt_buc.setText(new_txt);
-
-                if(new_txt.equals("0"))
-                    ((ListView) parent).performItemClick(v, position, img_minus.getId());
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, img_minus.getId());
             }
         });
 
         img_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txt_buc.setText(Integer.toString(Integer.parseInt(txt_buc.getText().toString())+1));
+                ((ListView) parent).performItemClick(v, position, img_minus.getId());
             }
         });
 

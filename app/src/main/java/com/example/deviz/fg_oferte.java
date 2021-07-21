@@ -3,6 +3,7 @@ package com.example.deviz;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import java.util.Calendar;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,8 +16,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class fg_oferte extends Fragment
 {
@@ -27,6 +30,7 @@ public class fg_oferte extends Fragment
     ArrayList<data_class_produs> produse, curr_produse;
 
     ArrayList<String> clienti_nume, produse_nume;
+    ArrayList<Integer> bucati = new ArrayList<>();
     ClientiOferteAdapter clienti_adapter;
     ProduseOferteAdapter produse_adapter;
 
@@ -68,6 +72,8 @@ public class fg_oferte extends Fragment
         init_spinner_cl();
         init_spinner_pr();
 
+        b_trimite();
+
         return r_view;
     }
 
@@ -83,7 +89,6 @@ public class fg_oferte extends Fragment
 
         if(factura)
             b_trimite.setText("Trimite factură");
-
     }
 
     void get_data_from_db()
@@ -122,8 +127,6 @@ public class fg_oferte extends Fragment
 
     void insert_item_in_client_listview(int pos)
     {
-        Log.d("FG_OFERTE","Inside InsertIteminClientListView");
-
         if(!curr_clienti.contains(clienti.get(pos))) {
             curr_clienti.add(clienti.get(pos));
             clienti_adapter.notifyDataSetChanged();
@@ -132,9 +135,8 @@ public class fg_oferte extends Fragment
 
     void insert_item_in_products_listview(int pos)
     {
-        Log.d("FG_OFERTE","Inside InsertIteminProductListView");
-
         if(!curr_produse.contains(produse.get(pos))) {
+            bucati.add(1);
             curr_produse.add(produse.get(pos));
             produse_adapter.notifyDataSetChanged();
         }
@@ -153,10 +155,8 @@ public class fg_oferte extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                if(cl_first)
+                if(position != 0)
                     insert_item_in_client_listview(position-1);
-                else
-                    cl_first = true;
 
             }
 
@@ -179,11 +179,8 @@ public class fg_oferte extends Fragment
         sp_produse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if(pr_first)
+                if(position != 0)
                     insert_item_in_products_listview(position-1);
-                else
-                    pr_first = true;
             }
 
             @Override
@@ -220,19 +217,55 @@ public class fg_oferte extends Fragment
 
         lst_produse.setAdapter(produse_adapter);
 
-        Log.d("FG_OFERTE", String.valueOf(produse_adapter.getCount()));
-
         lst_produse.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
+                TextView t = parent.findViewById(R.id.of_prod_row_buc);
+                int nr_buc = Integer.parseInt(t.getText().toString());
+
                 if(view.getId() == R.id.of_prod_img_minus)
                 {
-                    curr_produse.remove(position);
-                    produse_adapter.notifyDataSetChanged();
+                    nr_buc--;
+
+                    if(nr_buc == 0)
+                    {
+                        bucati.remove(position);
+                        curr_produse.remove(position);
+                        produse_adapter.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        bucati.set(position, nr_buc);
+                        t.setText(String.valueOf(nr_buc));
+                    }
                 }
+                else
+                    if(view.getId() == R.id.of_prod_img_add)
+                    {
+                        nr_buc++;
+
+                        t.setText(String.valueOf(nr_buc));
+                        bucati.set(position, nr_buc);
+                    }
             }
         });
     }
 
+    void b_trimite()
+    {
+        b_trimite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                for(data_class_client client:clienti)
+                {
+                    Facturare fac = new Facturare(getContext(), client, curr_produse, bucati);
+                    fac.get_oferta_pdf();
+
+                    ((MainActivity)getActivity()).start_fg("acasa");
+                }
+            }
+        });
+    }
 }
