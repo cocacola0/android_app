@@ -261,7 +261,7 @@ public class fg_oferte extends Fragment
                 for(data_class_client client:clienti)
                 {
                     Facturare fac = new Facturare(getContext(), client, curr_produse, bucati);
-                    fac.get_oferta_pdf();
+                    fac.get_oferta_pdf(factura);
 
                     ((MainActivity)getActivity()).start_fg("acasa");
                 }

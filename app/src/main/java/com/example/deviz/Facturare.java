@@ -1,17 +1,20 @@
-package com.example.deviz;
+    package com.example.deviz;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
 import android.util.Log;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -50,6 +53,8 @@ public class Facturare
 
     String nume_document;
     int pg_height = 800, pg_width = 794;
+    float table_total_width, table_total_height;
+    float total_pret = 0;
     int left_margin = 38;
     int second_column = 375;
     int down_table_height = 100;
@@ -178,8 +183,16 @@ public class Facturare
         createHeadings(cb,client.getAdresa() + "," + client.getLocalitate() + ",", second_column + 36, pg_height-145);
     }
 
+    float two_decimals(float f)
+    {
+        f = f*100;
+        f = (float) ((int)f);
+        f = f/100;
 
-    public void generate_body(Document doc, PdfWriter docWriter, PdfContentByte cb)
+        return f;
+    }
+
+    public void generate_body_factura(Document doc, PdfWriter docWriter, PdfContentByte cb)
     {
         //list all the products sold to the customer
         float[] columnWidths = {0.7f, 6f, 0.7f, 1f, 2f, 1.5f, 2f};
@@ -189,56 +202,62 @@ public class Facturare
         table.setTotalWidth(525f);
 
         PdfPCell cell = new PdfPCell(new Phrase("Nr. Crt."));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Denumirea produselor sau a serviciilor"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("U.M"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Cant."));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Preț unitar(fără TVA)"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Valoare"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Valoare TVA"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         table.setHeaderRows(1);
         int i=0, buc;
-        float total_pret = 0;
-        float total_tva = 0;
 
         for(data_class_produs produs:produse)
         {
             buc = bucati.get(i);
             i = i+1;
 
-            float pret_fara_tva = 100*produs.getPret()/119;
-            pret_fara_tva = pret_fara_tva*100;
-            pret_fara_tva = (float) ((int)pret_fara_tva);
-            pret_fara_tva = pret_fara_tva/100;
+            total_pret += produs.getPret();
 
-            total_pret += pret_fara_tva;
+            float pret_fara_tva = 100*produs.getPret()/119;
+            pret_fara_tva = two_decimals(pret_fara_tva);
 
             float val_tva = produs.getPret()-pret_fara_tva;
-            val_tva = val_tva*100;
-            val_tva = (float) ((int)val_tva);
-            val_tva = val_tva/100;
-
-            total_tva += val_tva;
+            val_tva = two_decimals(val_tva);
 
             table.addCell(String.valueOf(i));
             table.addCell(produs.getNume());
@@ -248,14 +267,59 @@ public class Facturare
             table.addCell(Float.toString(buc*pret_fara_tva));
             table.addCell(Float.toString(val_tva));
         }
+
         table.writeSelectedRows(0, -1, doc.leftMargin(), 575, docWriter.getDirectContent());
 
-        double first_w = 0.604517*table.getTotalWidth() + doc.leftMargin();
-        double second_w = first_w + 0.14389*table.getTotalWidth();
-        double third_w = second_w + 0.1079*table.getTotalWidth();
+        table_total_width = table.getTotalWidth();
+        table_total_height = table.getTotalHeight();
+        double w_0 = doc.leftMargin();
+        double w_1 = w_0 + 0.7*table_total_width/13.9;
+        double w_2 = w_0 + 6.7*table_total_width/13.9;
+        double w_3 = w_0 + 7.4*table_total_width/13.9;
+        double w_4 = w_0 + 8.4*table_total_width/13.9;
+        double w_5 = w_0 + 10.4*table_total_width/13.9;
+        double w_6 = w_0 + 11.9*table_total_width/13.9;
+        double w_7 = w_0 + table_total_width;
+
+        double table_y = 575 - table_total_height;
+
+        cb.moveTo(w_0,table_y);
+        cb.lineTo(w_0,down_table_y);
+
+        cb.moveTo(w_1,table_y);
+        cb.lineTo(w_1,down_table_y);
+
+        cb.moveTo(w_2,table_y);
+        cb.lineTo(w_2,down_table_y);
+
+        cb.moveTo(w_3,table_y);
+        cb.lineTo(w_3,down_table_y);
+
+        cb.moveTo(w_4,table_y);
+        cb.lineTo(w_4,down_table_y);
+
+        cb.moveTo(w_5,table_y);
+        cb.lineTo(w_5,down_table_y);
+
+        cb.moveTo(w_6,table_y);
+        cb.lineTo(w_6,down_table_y);
+
+        cb.moveTo(w_7,table_y);
+        cb.lineTo(w_7,down_table_y);
+        cb.stroke();
+
+        createMediumHeadings(cb,"Total", w_4+10, down_table_y-55);
+
+        createHeadings(cb, Float.toString(two_decimals(81*total_pret/100)), (float)w_5 + 5,down_table_y-20);
+        createHeadings(cb, Float.toString(two_decimals(19*total_pret/100)), (float)w_6 + 10,down_table_y-20);
+
+        createMediumHeadings(cb,Float.toString(total_pret), w_5+30, down_table_y-70);
+        double first_w = 0.604517*table_total_width + doc.leftMargin();
+        double second_w = first_w + 0.14389*table_total_width;
+        double third_w = second_w + 0.1079*table_total_width;
 
 
-        cb.rectangle(doc.leftMargin(),down_table_y - down_table_height, table.getTotalWidth(),down_table_height);
+        cb.rectangle(doc.leftMargin(),down_table_y - down_table_height, table_total_width,down_table_height);
 
         cb.moveTo(first_w,down_table_y);
         cb.lineTo(first_w,down_table_y-down_table_height);
@@ -267,10 +331,15 @@ public class Facturare
         cb.lineTo(third_w,down_table_y-space);
 
         cb.moveTo(second_w,down_table_y-space);
-        cb.lineTo(doc.leftMargin() + table.getTotalWidth(),down_table_y-space);
+        cb.lineTo(doc.leftMargin() + table_total_width,down_table_y-space);
 
         cb.stroke();
+    }
 
+
+
+    void generate_down_table(Document doc, PdfContentByte cb)
+    {
         createHeadings(cb,"Delegat:", doc.leftMargin() + 4, down_table_y-20);
         createHeadings(cb,delegat.getNume(), doc.leftMargin()+37, down_table_y-20);
 
@@ -284,18 +353,170 @@ public class Facturare
         createHeadings(cb,delegat.getMij_transport(), doc.leftMargin()+80, down_table_y-80);
 
         createHeadings(cb,"Nr.:", doc.leftMargin() + 155, down_table_y-80);
-        createHeadings(cb,delegat.getNr(), doc.leftMargin()+165, down_table_y-80);
-
-        createMediumHeadings(cb,"Total", first_w+10, down_table_y-55);
-
-        createHeadings(cb, Float.toString(total_pret), (float)second_w + 5,down_table_y-20);
-        createHeadings(cb, Float.toString(total_tva), (float)third_w + 10,down_table_y-20);
-
-        createMediumHeadings(cb,Float.toString(total_pret + total_tva), second_w+30, down_table_y-70);
-
-        
+        createHeadings(cb,delegat.getNr(), doc.leftMargin()+170, down_table_y-80);
     }
 
+    void generate_body_oferta(Document doc, PdfWriter docWriter, PdfContentByte cb) throws IOException, BadElementException {
+        //list all the products sold to the customer
+        float[] columnWidths = {0.7f,3f, 5f, 1f, 1f, 2f, 1.5f, 2f};
+
+        PdfPTable table = new PdfPTable(columnWidths);
+
+        table.setTotalWidth(525f);
+
+        PdfPCell cell = new PdfPCell(new Phrase("Nr. Crt."));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Imagine"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Denumirea produselor sau a serviciilor"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("U.M"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Cant."));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Preț unitar(fără TVA)"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Valoare"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Valoare TVA"));
+        cell.setPaddingTop(20);
+        cell.setPaddingBottom(20);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        table.setHeaderRows(1);
+        int i=0, buc;
+
+        for(data_class_produs produs:produse)
+        {
+            buc = bucati.get(i);
+            i = i+1;
+
+            total_pret += produs.getPret();
+
+            float pret_fara_tva = 100*produs.getPret()/119;
+            pret_fara_tva = two_decimals(pret_fara_tva);
+
+            float val_tva = produs.getPret()-pret_fara_tva;
+            val_tva = two_decimals(val_tva);
+
+            //img_prod.setImageBitmap(current_item.getImg());
+
+            ByteArrayOutputStream stream=new ByteArrayOutputStream();
+            Bitmap bmp_img = produs.getImg();
+            bmp_img.compress(Bitmap.CompressFormat.PNG,100,stream);
+            Image logo=Image.getInstance(stream.toByteArray());
+
+            logo.setWidthPercentage(80);
+            logo.scaleToFit(38,38);
+
+
+            table.addCell(String.valueOf(i));
+            table.addCell(logo);
+            table.addCell(produs.getNume());
+            table.addCell("buc");
+            table.addCell(String.valueOf(buc));
+            table.addCell(Float.toString(pret_fara_tva));
+            table.addCell(Float.toString(buc*pret_fara_tva));
+            table.addCell(Float.toString(val_tva));
+        }
+
+        table.writeSelectedRows(0, -1, doc.leftMargin(), 575, docWriter.getDirectContent());
+
+        table_total_width = table.getTotalWidth();
+        table_total_height = table.getTotalHeight();
+
+        //float[] columnWidths = {0.7f,3f, 5f, 1f, 1f, 2f, 1.5f, 2f};
+
+        double w_0 = doc.leftMargin();
+        double w_1 = w_0 + 0.7*table_total_width/16.2;
+        double w_2 = w_0 + 3.7*table_total_width/16.2;
+        double w_3 = w_0 + 8.7*table_total_width/16.2;
+        double w_4 = w_0 + 9.7*table_total_width/16.2;
+        double w_5 = w_0 + 10.7*table_total_width/16.2;
+        double w_6 = w_0 + 12.7*table_total_width/16.2;
+        double w_7 = w_0 + 14.2*table_total_width/16.2;
+        double w_8 = w_0 + table_total_width;
+
+        double table_y = 575 - table_total_height;
+
+        cb.moveTo(w_0,table_y);
+        cb.lineTo(w_0,down_table_y);
+
+        cb.moveTo(w_1,table_y);
+        cb.lineTo(w_1,down_table_y);
+
+        cb.moveTo(w_2,table_y);
+        cb.lineTo(w_2,down_table_y);
+
+        cb.moveTo(w_3,table_y);
+        cb.lineTo(w_3,down_table_y);
+
+        cb.moveTo(w_4,table_y);
+        cb.lineTo(w_4,down_table_y);
+
+        cb.moveTo(w_5,table_y);
+        cb.lineTo(w_5,down_table_y);
+
+        cb.moveTo(w_6,table_y);
+        cb.lineTo(w_6,down_table_y);
+
+        cb.moveTo(w_7,table_y);
+        cb.lineTo(w_7,down_table_y);
+
+        cb.moveTo(w_8,table_y);
+        cb.lineTo(w_8,down_table_y);
+
+        cb.rectangle(doc.leftMargin(),down_table_y - down_table_height, table_total_width,down_table_height);
+
+        cb.moveTo(w_5,down_table_y);
+        cb.lineTo(w_5,down_table_y-down_table_height);
+
+        cb.moveTo(w_6,down_table_y);
+        cb.lineTo(w_6,down_table_y-down_table_height);
+
+        cb.moveTo(w_7,down_table_y);
+        cb.lineTo(w_7,down_table_y-space);
+
+        cb.moveTo(w_6,down_table_y-space);
+        cb.lineTo(doc.leftMargin() + table_total_width,down_table_y-space);
+
+        cb.stroke();
+        createMediumHeadings(cb,"Total", w_5+10, down_table_y-55);
+
+        createHeadings(cb, Float.toString(two_decimals(81*total_pret/100)), (float)w_6 + 5,down_table_y-20);
+        createHeadings(cb, Float.toString(two_decimals(19*total_pret/100)), (float)w_7 + 10,down_table_y-20);
+
+        createMediumHeadings(cb,Float.toString(total_pret), w_6+30, down_table_y-70);
+    }
 
     private void initializeFonts()
     {
@@ -310,7 +531,7 @@ public class Facturare
         }
     }
 
-    public void get_oferta_pdf()
+    public void get_oferta_pdf(boolean factura)
     {
         Document document = new Document();
         String full_path = new ContextWrapper(context).getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + nume_document;
@@ -324,14 +545,26 @@ public class Facturare
             initializeFonts();
 
             generate_head(document, cb);
-            generate_body(document, docWriter, cb);
+            if(factura)
+                generate_body_factura(document, docWriter, cb);
+            else
+                try{
+                    generate_body_oferta(document, docWriter, cb);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+
+            generate_down_table(document, cb);
+
             document.close();
         }
         catch (FileNotFoundException | DocumentException e)
         {
             e.printStackTrace();
         }
-
     }
 
     public void get_factura_pdf()
