@@ -338,8 +338,6 @@
                     android:layout_weight="6"
                     android:inputType="text"/>
             </LinearLayout>
-
-
         </LinearLayout>
     </ScrollView>
 

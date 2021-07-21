@@ -19,19 +19,23 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
     String TABLE_PRODUCTS = "produse";
     String TABLE_CLIENTS = "clienti";
     String TABLE_CONT = "cont";
+    String TABLE_DELEGATI = "delegati";
 
     String CREATE_TABLE_PRODUCTS = "CREATE TABLE produse(nume text NOT NULL,cod text PRIMARY KEY,pret REAL,img BLOB NOT NULL);";
     String CREATE_TABLE_CLIENTS = "CREATE TABLE clienti(denumire text NOT NULL,cif text PRIMARY KEY,reg_com text NOT NULL,plat_tva BOOLEAN,localitate text NOT NULL,judet text NOT NULL, adresa text NOT NULL, email text NOT NULL, pers_contact text NOT NULL, telefon text NOT NULL);";
     String CREATE_TABLE_CONT = "CREATE TABLE cont(denumire text NOT NULL,cif text PRIMARY KEY,reg_com text NOT NULL,plat_tva BOOLEAN ,capital_social text NOT NULL,localitate text NOT NULL,judet text NOT NULL, adresa text NOT NULL, cod_postal text NOT NULL, telefon text NOT NULL, email text NOT NULL,cont_bancar text NOT NULL, banca text NOT NULL, cota_tva text NOT NULL, tip_tva text NOT NULL);";
+    String CREATE_TABLE_DELEGATI = "CREATE TABLE delegati(nume_delegat text NOT NULL,cnp_delegat text PRIMARY KEY,ci_delegat text NOT NULL, mij_transport text NOT NULL, nr_delegat text NOT NULL);";
 
 
     String DROP_TABLE_PRODUCTS = "DROP TABLE if exists " + TABLE_PRODUCTS;
     String DROP_TABLE_CUSTOMERS = "DROP TABLE if exists " + TABLE_CLIENTS;
     String DROP_TABLE_CONT = "DROP TABLE if exists " + TABLE_CONT;
+    String DROP_TABLE_DELEGATI = "DROP TABLE if exists " + TABLE_DELEGATI;
 
     String GET_TABLE_PRODUCTS = "SELECT * from " + TABLE_PRODUCTS;
     String GET_TABLE_CLIENTS = "SELECT * from " + TABLE_CLIENTS;
     String GET_TABLE_CONT = "SELECT * from " + TABLE_CONT;
+    String GET_TABLE_DELEGATI = "SELECT * from " + TABLE_DELEGATI;
 
     String GET_TABLE_PRODUCTS_BY_COD = "SELECT * from " + TABLE_PRODUCTS + " WHERE cod=?";
     String GET_TABLE_CLIENTS_BY_CIF = "SELECT * from " + TABLE_CLIENTS + " WHERE cif=?";
@@ -52,6 +56,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         db.execSQL(CREATE_TABLE_PRODUCTS);
         db.execSQL(CREATE_TABLE_CLIENTS);
         db.execSQL(CREATE_TABLE_CONT);
+        db.execSQL(CREATE_TABLE_DELEGATI);
     }
 
     @Override
@@ -65,6 +70,9 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
             else
                 if(db_name.equals("cont"))
                     db.execSQL(DROP_TABLE_CONT);
+                else
+                    if(db_name.equals("delegati"))
+                        db.execSQL(DROP_TABLE_DELEGATI);
     }
 
     public boolean insert_product_data(data_class_produs produs)
@@ -94,6 +102,15 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         ContentValues item = cont.get_cv();
 
         long result = db.insert(TABLE_CONT, null, item);
+
+        return result != -1;
+    }
+
+    public boolean insert_delegat_data(data_class_delegat delegat)
+    {
+        ContentValues item = delegat.get_cv();
+
+        long result = db.insert(TABLE_DELEGATI, null, item);
 
         return result != -1;
     }
@@ -177,9 +194,40 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         return result != -1;
     }
 
+    public boolean modify_delegat_data(data_class_delegat old_prod, data_class_delegat new_prod)
+    {
+        long result = -1;
+
+        if(old_prod == new_prod)
+        {
+            return true;
+        }
+
+        ContentValues new_item = new_prod.get_cv();
+
+        Cursor c = db.rawQuery(GET_TABLE_DELEGATI,null, null);
+
+        if(c.getCount() > 0)
+        {
+            result = db.update(TABLE_DELEGATI, new_item, "cnp_delegat=?", new String[]{old_prod.getCnp()});
+        }
+
+        return result != -1;
+    }
+
     public boolean check_account_exists()
     {
         Cursor c = db.rawQuery(GET_TABLE_CONT,null, null);
+
+        if(c.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public boolean check_delegat_exists()
+    {
+        Cursor c = db.rawQuery(GET_TABLE_DELEGATI,null, null);
 
         if(c.getCount() > 0)
             return true;
@@ -267,6 +315,24 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
 
 
             return new data_class_cont(denumire, cif, reg_com, plat_tva, capital_social, localitate, judet, adresa,cod_postal,telefon, email,cont_bancar, banca, cota_tva, tip_tva);
+        }
+        return null;
+    }
+
+    public data_class_delegat get_delegat_from_table()
+    {
+        Cursor c = db.rawQuery(GET_TABLE_DELEGATI,null, null);
+
+        if (c.moveToFirst())
+        {
+            String nume = (c.getString(c.getColumnIndex("nume_delegat")));
+            String cnp = (c.getString(c.getColumnIndex("cnp_delegat")));
+            String ci = (c.getString(c.getColumnIndex("ci_delegat")));
+            String mij_transport = (c.getString(c.getColumnIndex("mij_transport")));
+            String nr_delegat = (c.getString(c.getColumnIndex("nr_delegat")));
+
+
+            return new data_class_delegat(nume, cnp, ci, mij_transport, nr_delegat);
         }
         return null;
     }

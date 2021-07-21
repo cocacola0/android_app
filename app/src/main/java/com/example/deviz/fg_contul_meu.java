@@ -26,12 +26,6 @@ public class fg_contul_meu extends Fragment
         // Required empty public constructor
     }
 
-    public fg_contul_meu(data_class_cont cont)
-    {
-        this.cont = cont;
-        exists = true;
-    }
-
     public static fg_contul_meu newInstance() {
         return new fg_contul_meu();
     }
@@ -61,7 +55,7 @@ public class fg_contul_meu extends Fragment
 
         return r_view;
     }
-    boolean check_if_exists()
+    private boolean check_if_exists()
     {
         MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "cont");
 

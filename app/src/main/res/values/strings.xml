@@ -57,7 +57,12 @@
     <string name="trimite_oferta">Trimite Ofertă</string>
     <string name="selecteaza_client">Selectează client</string>
     <string name="selecteaza_produs">Selectează produs</string>
-
+    <string name="nume_delegat">Nume Delegat</string>
+    <string name="ci_delegat">CI Delegat</string>
+    <string name="delegati">Delegați</string>
+    <string name="cnp_delegat">CNP Delegat</string>
+    <string name="mijloc_transport">Mijloc Transport</string>
+    <string name="numar_mij_transport">Numar mijloc transport</string>
     <string name="fragment_neimplementat">Fragment neimplemantat</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

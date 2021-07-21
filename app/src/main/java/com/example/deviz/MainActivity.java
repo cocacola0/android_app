@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 if(id==R.id.menu_contul_meu)
                     start_fg("contul_meu");
 
+                if(id==R.id.menu_delegati)
+                    start_fg("delegati");
+
                 d.closeDrawers();
                 return true;
             }
@@ -161,6 +164,11 @@ public class MainActivity extends AppCompatActivity {
             case "contul_meu":
                 transaction.replace(R.id.layout_frame, fg_contul_meu.class, null);
                 change_toolbar(R.string.contul_meu);
+                break;
+
+            case "delegati":
+                transaction.replace(R.id.layout_frame, fg_delegati.class, null);
+                change_toolbar(R.string.delegati);
                 break;
             default:
                 transaction.replace(R.id.layout_frame, fg_acasa.class, null);
