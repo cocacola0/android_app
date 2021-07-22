@@ -13,10 +13,12 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,6 +40,8 @@ public class fg_oferte extends Fragment
 
     Boolean cl_first = false, pr_first = false;
     Boolean factura = false;
+
+    String discount;
 
     public fg_oferte() {
         // Required empty public constructor
@@ -87,8 +91,9 @@ public class fg_oferte extends Fragment
 
         b_trimite = r_view.findViewById(R.id.fg_of_btn_trimite);
 
-        if(factura)
+        if(factura) {
             b_trimite.setText("Trimite factură");
+        }
     }
 
     void get_data_from_db()
@@ -181,6 +186,8 @@ public class fg_oferte extends Fragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position != 0)
                     insert_item_in_products_listview(position-1);
+
+                sp_produse.setSelection(0);
             }
 
             @Override
@@ -213,7 +220,7 @@ public class fg_oferte extends Fragment
     void init_lst_pr()
     {
         curr_produse = new ArrayList<data_class_produs>();
-        produse_adapter = new ProduseOferteAdapter(getContext(), curr_produse);
+        produse_adapter = new ProduseOferteAdapter(getContext(), curr_produse, factura);
 
         lst_produse.setAdapter(produse_adapter);
 
@@ -221,14 +228,11 @@ public class fg_oferte extends Fragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                TextView t = parent.findViewById(R.id.of_prod_row_buc);
-                int nr_buc = Integer.parseInt(t.getText().toString());
+                int nr_buc = bucati.get(position);
 
                 if(view.getId() == R.id.of_prod_img_minus)
                 {
-                    nr_buc--;
-
-                    if(nr_buc == 0)
+                    if(nr_buc == 1)
                     {
                         bucati.remove(position);
                         curr_produse.remove(position);
@@ -236,17 +240,13 @@ public class fg_oferte extends Fragment
                     }
                     else
                     {
-                        bucati.set(position, nr_buc);
-                        t.setText(String.valueOf(nr_buc));
+                        bucati.set(position, nr_buc-1);
                     }
                 }
                 else
                     if(view.getId() == R.id.of_prod_img_add)
                     {
-                        nr_buc++;
-
-                        t.setText(String.valueOf(nr_buc));
-                        bucati.set(position, nr_buc);
+                        bucati.set(position, nr_buc+1);
                     }
             }
         });
@@ -258,13 +258,19 @@ public class fg_oferte extends Fragment
             @Override
             public void onClick(View v)
             {
-                for(data_class_client client:clienti)
-                {
-                    Facturare fac = new Facturare(getContext(), client, curr_produse, bucati);
-                    fac.get_oferta_pdf(factura);
+                if(curr_clienti.size() == 0)
+                    Toast.makeText(getContext(), "Introduceți produse!" , Toast.LENGTH_SHORT).show();
+                else
+                    if(curr_produse.size() == 0)
+                        Toast.makeText(getContext(), "Introduceți clienti!" , Toast.LENGTH_SHORT).show();
+                    else
+                        for(data_class_client client:curr_clienti)
+                        {
+                            Facturare fac = new Facturare(getContext(), client, curr_produse, bucati);
+                            fac.get_oferta_pdf(factura);
 
-                    ((MainActivity)getActivity()).start_fg("acasa");
-                }
+                            ((MainActivity)getActivity()).start_fg("acasa");
+                        }
             }
         });
     }

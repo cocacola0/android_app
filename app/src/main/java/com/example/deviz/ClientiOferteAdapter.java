@@ -55,7 +55,8 @@ public class ClientiOferteAdapter extends BaseAdapter
 
         img.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 ((ListView) parent).performItemClick(v, position, img.getId()); // Let the event be handled in onItemClick()
             }
         });

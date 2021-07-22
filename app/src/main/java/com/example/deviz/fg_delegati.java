@@ -55,8 +55,6 @@ public class fg_delegati extends Fragment {
     {
         MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "delegati");
 
-        Log.d("FG_DELEGATI", "check_if_exists: " + db_handler.check_delegat_exists());
-
         return db_handler.check_delegat_exists();
     }
 
@@ -109,8 +107,10 @@ public class fg_delegati extends Fragment {
             @Override
             public void onClick(View v)
             {
-                if(!exists)
+                if(!exists) {
                     adauga_delegat();
+                    ((MainActivity) getActivity()).start_fg("abonament");
+                }
                 else
                     modifica_delegat();
             }

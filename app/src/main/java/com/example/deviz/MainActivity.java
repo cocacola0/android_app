@@ -37,7 +37,14 @@ public class MainActivity extends AppCompatActivity {
         request_permissions();
 
         setup_drawer_layout();
-        start_fg("acasa");
+
+        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getApplicationContext(), "cont");
+
+        if(!db_handler.check_account_exists())
+            start_fg("contul_meu");
+        else
+            start_fg("acasa");
+
         img_home();
     }
 
@@ -56,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
                 if(id==R.id.menu_contul_meu)
                     start_fg("contul_meu");
 
-                if(id==R.id.menu_delegati)
-                    start_fg("delegati");
+                else
+                    if(id==R.id.menu_abonament)
+                        start_fg("abonament");
 
                 d.closeDrawers();
                 return true;
@@ -169,6 +177,11 @@ public class MainActivity extends AppCompatActivity {
             case "delegati":
                 transaction.replace(R.id.layout_frame, fg_delegati.class, null);
                 change_toolbar(R.string.delegati);
+                break;
+
+            case "abonament":
+                transaction.replace(R.id.layout_frame, fg_abonament.class, null);
+                change_toolbar(R.string.abonament);
                 break;
             default:
                 transaction.replace(R.id.layout_frame, fg_acasa.class, null);

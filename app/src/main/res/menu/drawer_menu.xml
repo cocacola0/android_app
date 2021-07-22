@@ -5,9 +5,6 @@
         android:title="@string/contul_meu"/>
 
     <item
-        android:id="@+id/menu_delegati"
-        android:title="Delegati"/>
-    <item
         android:id="@+id/menu_abonament"
         android:title="@string/abonament"/>
 </menu>

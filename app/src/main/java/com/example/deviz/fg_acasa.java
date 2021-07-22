@@ -76,7 +76,7 @@ public class fg_acasa extends Fragment
         b_furnizori.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                ((MainActivity)getActivity()).start_fg("furnizori");
+                ((MainActivity)getActivity()).start_fg("delegati");
             }
         });
 

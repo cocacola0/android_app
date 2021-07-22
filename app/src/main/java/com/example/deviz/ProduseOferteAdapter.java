@@ -2,6 +2,8 @@ package com.example.deviz;
 
 import android.content.Context;
 import android.media.Image;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +13,32 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputLayout;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class ProduseOferteAdapter extends BaseAdapter {
     final private Context context;
     final private ArrayList<data_class_produs> list;
+    final private boolean factura;
 
-    public ProduseOferteAdapter(Context context, ArrayList<data_class_produs> list)
+    TextView txt_buc;
+
+    public ProduseOferteAdapter(Context context, ArrayList<data_class_produs> list, boolean factura)
     {
         this.context = context;
         this.list = list;
+
+        this.factura = factura;
     }
+
+    public void add_nr_buc()
+    {
+
+    }
+
 
     @Override
     public int getCount() {
@@ -46,7 +63,7 @@ public class ProduseOferteAdapter extends BaseAdapter {
         TextView txt_nume = convertView.findViewById(R.id.of_prod_row_nume);
         TextView txt_cod = convertView.findViewById(R.id.of_prod_row_cod);
         TextView txt_pret = convertView.findViewById(R.id.of_prod_row_pret);
-        TextView txt_buc = convertView.findViewById(R.id.of_prod_row_buc);
+        txt_buc = convertView.findViewById(R.id.of_prod_row_buc);
 
         ImageView img_prod = convertView.findViewById(R.id.of_prod_row_img);
         ImageView img_minus = convertView.findViewById(R.id.of_prod_img_minus);
@@ -64,14 +81,20 @@ public class ProduseOferteAdapter extends BaseAdapter {
         img_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int nr_buc = Integer.valueOf(txt_buc.getText().toString());
                 ((ListView) parent).performItemClick(v, position, img_minus.getId());
+                if(nr_buc > 1)
+                    txt_buc.setText(Integer.toString(nr_buc - 1));
             }
         });
 
         img_add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                ((ListView) parent).performItemClick(v, position, img_minus.getId());
+            public void onClick(View v)
+            {
+                int nr_buc = Integer.valueOf(txt_buc.getText().toString());
+                ((ListView) parent).performItemClick(v, position, img_add.getId());
+                txt_buc.setText(Integer.toString(nr_buc + 1));
             }
         });
 

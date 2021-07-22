@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Element;
@@ -45,7 +46,6 @@ public class Facturare
     ArrayList<data_class_produs> produse;
     data_class_cont cont;
     ArrayList<Integer> bucati;
-
     Date currentTime;
     private BaseFont bfBold;
     private BaseFont bf;
@@ -81,10 +81,9 @@ public class Facturare
         generate_nume_document();
     }
 
-    void generate_nume_document()
+    final void generate_nume_document()
     {
         currentTime = Calendar.getInstance().getTime();
-
         nume_document = currentTime.toString().replace(" ","_");
         nume_document = nume_document + ".pdf";
     }
@@ -334,9 +333,19 @@ public class Facturare
         cb.lineTo(doc.leftMargin() + table_total_width,down_table_y-space);
 
         cb.stroke();
+
+        salveaza_factura_database(client.getDenumire(),Float.toString(total_pret), nume_document, true);
     }
 
+    void salveaza_factura_database(String nume, String val, String nume_fisier, Boolean factura)
+    {
+        MySqlliteDBHandler db_handler;
 
+        db_handler = new MySqlliteDBHandler(context, "facturi");
+        if(!db_handler.insert_facturi_data(new data_class_facturi(nume, val, nume_fisier, factura)))
+            Toast.makeText(context, "eroare!", Toast.LENGTH_SHORT).show();
+
+    }
 
     void generate_down_table(Document doc, PdfContentByte cb)
     {
@@ -516,6 +525,8 @@ public class Facturare
         createHeadings(cb, Float.toString(two_decimals(19*total_pret/100)), (float)w_7 + 10,down_table_y-20);
 
         createMediumHeadings(cb,Float.toString(total_pret), w_6+30, down_table_y-70);
+
+        salveaza_factura_database(client.getDenumire(), Float.toString(total_pret),  nume_document, false);
     }
 
     private void initializeFonts()

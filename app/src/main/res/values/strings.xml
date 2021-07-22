@@ -64,6 +64,8 @@
     <string name="mijloc_transport">Mijloc Transport</string>
     <string name="numar_mij_transport">Numar mijloc transport</string>
     <string name="fragment_neimplementat">Fragment neimplemantat</string>
+    <string name="discount">Discount:</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

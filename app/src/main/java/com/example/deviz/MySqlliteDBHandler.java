@@ -20,22 +20,26 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
     String TABLE_CLIENTS = "clienti";
     String TABLE_CONT = "cont";
     String TABLE_DELEGATI = "delegati";
+    String TABLE_FACTURI = "facturi";
 
     String CREATE_TABLE_PRODUCTS = "CREATE TABLE produse(nume text NOT NULL,cod text PRIMARY KEY,pret REAL,img BLOB NOT NULL);";
     String CREATE_TABLE_CLIENTS = "CREATE TABLE clienti(denumire text NOT NULL,cif text PRIMARY KEY,reg_com text NOT NULL,plat_tva BOOLEAN,localitate text NOT NULL,judet text NOT NULL, adresa text NOT NULL, email text NOT NULL, pers_contact text NOT NULL, telefon text NOT NULL);";
     String CREATE_TABLE_CONT = "CREATE TABLE cont(denumire text NOT NULL,cif text PRIMARY KEY,reg_com text NOT NULL,plat_tva BOOLEAN ,capital_social text NOT NULL,localitate text NOT NULL,judet text NOT NULL, adresa text NOT NULL, cod_postal text NOT NULL, telefon text NOT NULL, email text NOT NULL,cont_bancar text NOT NULL, banca text NOT NULL, cota_tva text NOT NULL, tip_tva text NOT NULL);";
     String CREATE_TABLE_DELEGATI = "CREATE TABLE delegati(nume_delegat text NOT NULL,cnp_delegat text PRIMARY KEY,ci_delegat text NOT NULL, mij_transport text NOT NULL, nr_delegat text NOT NULL);";
+    String CREATE_TABLE_FACTURI = "CREATE TABLE facturi(nume text NOT NULL,val text NOT NULL,nume_fisier text PRIMARY KEY, factura BOOLEAN);";
 
 
     String DROP_TABLE_PRODUCTS = "DROP TABLE if exists " + TABLE_PRODUCTS;
     String DROP_TABLE_CUSTOMERS = "DROP TABLE if exists " + TABLE_CLIENTS;
     String DROP_TABLE_CONT = "DROP TABLE if exists " + TABLE_CONT;
     String DROP_TABLE_DELEGATI = "DROP TABLE if exists " + TABLE_DELEGATI;
+    String DROP_TABLE_FACTURI = "DROP TABLE if exists " + TABLE_FACTURI;
 
     String GET_TABLE_PRODUCTS = "SELECT * from " + TABLE_PRODUCTS;
     String GET_TABLE_CLIENTS = "SELECT * from " + TABLE_CLIENTS;
     String GET_TABLE_CONT = "SELECT * from " + TABLE_CONT;
     String GET_TABLE_DELEGATI = "SELECT * from " + TABLE_DELEGATI;
+    String GET_TABLE_FACTURI = "SELECT * from " + TABLE_FACTURI;
 
     String GET_TABLE_PRODUCTS_BY_COD = "SELECT * from " + TABLE_PRODUCTS + " WHERE cod=?";
     String GET_TABLE_CLIENTS_BY_CIF = "SELECT * from " + TABLE_CLIENTS + " WHERE cif=?";
@@ -57,6 +61,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         db.execSQL(CREATE_TABLE_CLIENTS);
         db.execSQL(CREATE_TABLE_CONT);
         db.execSQL(CREATE_TABLE_DELEGATI);
+        db.execSQL(CREATE_TABLE_FACTURI);
     }
 
     @Override
@@ -73,6 +78,9 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
                 else
                     if(db_name.equals("delegati"))
                         db.execSQL(DROP_TABLE_DELEGATI);
+                    else
+                        if(db_name.equals("facturi"))
+                            db.execSQL(DROP_TABLE_FACTURI);
     }
 
     public boolean insert_product_data(data_class_produs produs)
@@ -115,6 +123,14 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         return result != -1;
     }
 
+    public boolean insert_facturi_data(data_class_facturi facturi)
+    {
+        ContentValues item = facturi.get_cv();
+
+        long result = db.insert(TABLE_FACTURI, null, item);
+
+        return result != -1;
+    }
     public boolean delete_product_data(data_class_produs produs)
     {
         long result = db.delete("produse", "cod=?", new String[]{produs.getCod()});
@@ -126,6 +142,13 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
     public boolean delete_client_data(data_class_client produs)
     {
         long result = db.delete(TABLE_CLIENTS, "cif=?", new String[]{produs.getCif()});
+
+        return result != -1;
+    }
+
+    public boolean delete_facturi_data(data_class_facturi facturi)
+    {
+        long result = db.delete(TABLE_FACTURI, "nume_fisier=?", new String[]{facturi.getNume_fisier()});
 
         return result != -1;
     }
@@ -337,7 +360,28 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         return null;
     }
 
+    public ArrayList<data_class_facturi> get_facturi_from_table()
+    {
+        ArrayList<data_class_facturi> list = new ArrayList<>();
+        data_class_facturi item;
 
+        Cursor c = db.rawQuery(GET_TABLE_FACTURI, null, null);
+
+        if (c.moveToFirst())
+        {
+            do {
+                String nume = (c.getString(c.getColumnIndex("nume")));
+                String val = (c.getString(c.getColumnIndex("val")));
+                String nume_fisier = (c.getString(c.getColumnIndex("nume_fisier")));
+                boolean factura = (c.getInt(c.getColumnIndex("factura")) > 0);
+
+                item = new data_class_facturi(nume, val, nume_fisier, factura);
+                list.add(item);
+            }while (c.moveToNext());
+        }
+
+        return list;
+    }
     private byte[] convert_bitmap_to_bytearr(Bitmap img)
     {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

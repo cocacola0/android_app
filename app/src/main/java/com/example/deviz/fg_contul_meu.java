@@ -200,7 +200,7 @@ public class fg_contul_meu extends Fragment
 
             if (succeded) {
                 Toast.makeText(getContext(), "Inserare reușită!", Toast.LENGTH_SHORT).show();
-                ((MainActivity) getActivity()).start_fg("acasa");
+                ((MainActivity) getActivity()).start_fg("delegati");
 
             } else
                 Toast.makeText(getContext(), "Inserare nereușită!", Toast.LENGTH_SHORT).show();

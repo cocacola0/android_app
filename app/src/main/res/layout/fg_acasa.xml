@@ -16,7 +16,7 @@
             android:layout_weight="1"
             android:weightSum="2">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_oferte"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -24,9 +24,11 @@
                 android:text="@string/oferte"
                 android:textSize="20sp"
                 android:padding="3dip"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:background="#2aa34f"
+                android:textColor="#fff"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_facturi"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -34,7 +36,9 @@
                 android:text="@string/facturi"
                 android:textSize="20sp"
                 android:padding="3dip"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:background="#3659d9"
+                android:textColor="#fff"/>
         </TableRow>
 
         <TableRow
@@ -43,7 +47,7 @@
             android:layout_weight="1"
             android:weightSum="2">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_produse"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -51,9 +55,11 @@
                 android:text="@string/produse"
                 android:textSize="20sp"
                 android:padding="3dip"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:background="#d63640"
+                android:textColor="#fff"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_rapoarte"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -61,7 +67,9 @@
                 android:text="@string/rapoarte"
                 android:textSize="20sp"
                 android:padding="3dip"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:background="#ffd105"
+                android:textColor="#fff"/>
         </TableRow>
 
         <TableRow
@@ -70,7 +78,7 @@
             android:layout_weight="1"
             android:weightSum="2">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_clienti"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -78,17 +86,21 @@
                 android:text="@string/clienti"
                 android:textSize="20sp"
                 android:padding="3dip"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:background="#db38ff"
+                android:textColor="#fff"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_furnizori"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/furnizori"
+                android:text="@string/delegati"
                 android:textSize="20sp"
                 android:padding="3dip"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:background="#f75307"
+                android:textColor="#fff"/>
         </TableRow>
 
     </TableLayout>
