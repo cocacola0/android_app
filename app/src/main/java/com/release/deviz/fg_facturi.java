@@ -1,0 +1,38 @@
+package com.release.deviz;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+public class fg_facturi extends Fragment {
+    public fg_facturi() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ((MainActivity)getActivity()).change_toolbar(R.string.facturi);
+    }
+
+    public static fg_facturi newInstance() {
+        return new fg_facturi();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fg_facturi, container, false);
+    }
+}

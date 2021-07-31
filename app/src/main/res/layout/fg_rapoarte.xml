@@ -26,8 +26,6 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:text="Șterge"
-            android:textSize="12sp"
-            android:padding="10dip"
-            android:layout_margin="10dp"/>
+            style="@style/BigButton"/>
     </LinearLayout>
 </RelativeLayout>

@@ -7,4 +7,8 @@
     <item
         android:id="@+id/menu_abonament"
         android:title="@string/abonament"/>
+
+    <item
+        android:id="@+id/menu_despre"
+        android:title="@string/despre"/>
 </menu>

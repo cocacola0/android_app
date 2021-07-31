@@ -30,4 +30,13 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="Theme.Deviz.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Deviz.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Deviz.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
