@@ -22,4 +22,23 @@ public class Utils
 
         return true;
     }
+
+    boolean check_float(String s, String tag)
+    {
+        float ret;
+
+        try
+        {
+            ret = Float.parseFloat(s);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(c, tag + " incorect!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+
 }

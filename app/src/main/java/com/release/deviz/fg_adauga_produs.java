@@ -117,7 +117,7 @@ public class fg_adauga_produs extends Fragment
         Utils u = new Utils(getContext());
 
         if(u.check_string_non_empty(nume,"nume") && u.check_string_non_empty(cod,"cod") &&
-                u.check_string_non_empty(str_pret,"pret")) {
+                u.check_string_non_empty(str_pret,"pret") && u.check_float(str_pret, "pret")) {
             BitmapDrawable drawable;
 
             if(img_produs.getDrawable() != null)

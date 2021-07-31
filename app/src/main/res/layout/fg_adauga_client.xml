@@ -5,238 +5,243 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".fg_adauga_client"
-        android:layout_margin="10dp"
-        android:layout_marginHorizontal="50dp">
+        android:layout_above="@+id/btn_adauga_client">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
+            android:orientation="vertical"
+            tools:context=".fg_adauga_client"
+            android:layout_margin="10dp"
+            android:layout_marginHorizontal="50dp">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/denumire"
-                android:textSize="20sp"/>
+                android:orientation="horizontal"
+                android:weightSum="10">
 
-            <EditText
-                android:id="@+id/etxt_denumire"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/denumire"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_denumire"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cif"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_cif"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reg_com"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_reg_com"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/platitor_tva"
+                    android:textSize="20sp"/>
+
+                <CheckBox
+                    android:id="@+id/plat_tva_da"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:text="@string/da"/>
+
+
+                <CheckBox
+                    android:id="@+id/plat_tva_nu"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nu"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/localitate"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_localitate"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/judetul"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_judetul"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/adresa"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_adresa"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_email"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pers_contact"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:id="@+id/etxt_pers_contact"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/telefon"
+                    android:textSize="20sp"/>
+                <EditText
+                    android:id="@+id/etxt_telefon"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:inputType="text"/>
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/cif"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/etxt_cif"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/reg_com"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/etxt_reg_com"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/platitor_tva"
-                android:textSize="20sp"/>
-
-            <CheckBox
-                android:id="@+id/plat_tva_da"
-                android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="wrap_content"
-                android:text="@string/da"/>
-
-
-            <CheckBox
-                android:id="@+id/plat_tva_nu"
-                android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="wrap_content"
-                android:text="@string/nu"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/localitate"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/etxt_localitate"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/judetul"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/etxt_judetul"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/adresa"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/etxt_adresa"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/email"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/etxt_email"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/pers_contact"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/etxt_pers_contact"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:text="@string/telefon"
-                android:textSize="20sp"/>
-            <EditText
-                android:id="@+id/etxt_telefon"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:inputType="text"/>
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/btn_adauga_client"
