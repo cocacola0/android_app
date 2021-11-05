@@ -76,6 +76,8 @@ public class fg_adauga_client extends Fragment
         String pers_contact = etxt_pers_contact.getText().toString();
         String telefon = etxt_telefon.getText().toString();
 
+        return new data_class_client(denumire, cif, reg_com, plat_tva_da, localitate, judetul, adresa, email, pers_contact, telefon);
+        /*
         Utils u = new Utils(getContext());
 
         if(u.check_string_non_empty(denumire, "denumire") && u.check_string_non_empty(cif, "cif") &&
@@ -86,7 +88,7 @@ public class fg_adauga_client extends Fragment
 
             return new data_class_client(denumire, cif, reg_com, plat_tva_da, localitate, judetul, adresa, email, pers_contact, telefon);
 
-        return null;
+        return null;*/
     }
 
     void b_adauga_client(View r_view)

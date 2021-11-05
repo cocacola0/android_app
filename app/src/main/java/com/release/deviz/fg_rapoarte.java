@@ -1,28 +1,41 @@
 package com.release.deviz;
 
+import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
+
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.pdf.PdfRenderer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class fg_rapoarte extends Fragment
 {
-    Button b_adauga, b_sterge, b_modifica;
     ListView lst_view;
     ArrayList<data_class_facturi> list;
     RapoarteAdapter adapter;
-    View previous_selected;
-    int selected_index = -1;
 
     @Override
     public void onResume() {
@@ -52,14 +65,12 @@ public class fg_rapoarte extends Fragment
         View r_view = inflater.inflate(R.layout.fg_rapoarte, container, false);
 
         lst_view(r_view);
-        b_sterge(r_view);
 
         return r_view;
     }
 
-    void open_pdf(data_class_facturi factura)
-    {
-
+    void open_pdf(data_class_facturi factura) throws IOException {
+        ((MainActivity)getActivity()).start_fg_with_args("pdf_viewer",factura);
     }
 
     void lst_view(View r_view)
@@ -73,60 +84,13 @@ public class fg_rapoarte extends Fragment
 
         lst_view.setAdapter(adapter);
 
-        lst_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lst_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                open_pdf(list.get(position));
-                if(previous_selected != null)
-                    previous_selected.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-                if(previous_selected == view)
-                {
-                    view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    previous_selected = null;
-                    selected_index = -1;
-                }
-                else
-                {
-                    view.setBackgroundColor(Color.parseColor("#ADD8E6"));
-                    previous_selected = view;
-                    selected_index = position;
-                }
-
-                if(view.getId() == R.id.btn_rapoarte)
-                {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
                     open_pdf(list.get(position));
-                }
-
-                return true;
-            }
-        });
-    }
-
-    void b_sterge(View r_view)
-    {
-        Button b_sterge = r_view.findViewById(R.id.btn_rapoarte_sterge);
-
-        b_sterge.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(selected_index != -1)
-                {
-                    MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "facturi");
-                    boolean result = db_handler.delete_facturi_data(list.get(selected_index));
-
-                    if(result)
-                    {
-                        list.remove(selected_index);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-                else
-                {
-                    Toast.makeText(getContext(), "Nici o factură selectată!", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });

@@ -82,6 +82,7 @@
     <string name="gratuit">Gratuit</string>
     <string name="plateste">Plătește</string>
     <string name="abonament_curent">Abonament curent:</string>
+    <string name="pdf_viewer">Vizualizare PDF</string>
 
     <!--despre-->
     <string name="text_1">Mulțumim că ați descărcat aplicația noastră!</string>
@@ -98,4 +99,6 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

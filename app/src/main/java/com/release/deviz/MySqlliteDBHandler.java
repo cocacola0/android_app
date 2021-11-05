@@ -19,10 +19,10 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
     String TABLE_DELEGATI = "delegati";
     String TABLE_FACTURI = "facturi";
 
-    String CREATE_TABLE_PRODUCTS = "CREATE TABLE produse(nume text NOT NULL,cod text PRIMARY KEY,pret REAL,img BLOB NOT NULL);";
-    String CREATE_TABLE_CLIENTS = "CREATE TABLE clienti(denumire text NOT NULL,cif text PRIMARY KEY,reg_com text NOT NULL,plat_tva BOOLEAN,localitate text NOT NULL,judet text NOT NULL, adresa text NOT NULL, email text NOT NULL, pers_contact text NOT NULL, telefon text NOT NULL);";
-    String CREATE_TABLE_CONT = "CREATE TABLE cont(denumire text NOT NULL,cif text PRIMARY KEY,reg_com text NOT NULL,plat_tva BOOLEAN ,capital_social text NOT NULL,localitate text NOT NULL,judet text NOT NULL, adresa text NOT NULL, cod_postal text NOT NULL, telefon text NOT NULL, email text NOT NULL,cont_bancar text NOT NULL, banca text NOT NULL, cota_tva text NOT NULL, tip_tva text NOT NULL);";
-    String CREATE_TABLE_DELEGATI = "CREATE TABLE delegati(nume_delegat text NOT NULL,cnp_delegat text PRIMARY KEY,ci_delegat text NOT NULL, mij_transport text NOT NULL, nr_delegat text NOT NULL);";
+    String CREATE_TABLE_PRODUCTS = "CREATE TABLE produse(nume text NOT NULL PRIMARY KEY,cod text,pret REAL,img BLOB);";
+    String CREATE_TABLE_CLIENTS = "CREATE TABLE clienti(denumire text PRIMARY KEY,cif text ,reg_com text ,plat_tva BOOLEAN,localitate text,judet text, adresa text, email text, pers_contact text, telefon text);";
+    String CREATE_TABLE_CONT = "CREATE TABLE cont(denumire text PRIMARY KEY,cif text, reg_com text, plat_tva BOOLEAN ,capital_social text, localitate text, judet text, adresa text, cod_postal text, telefon text, email text,cont_bancar text, banca text, cota_tva text, tip_tva text);";
+    String CREATE_TABLE_DELEGATI = "CREATE TABLE delegati(nume_delegat text PRIMARY KEY,cnp_delegat text,ci_delegat text, mij_transport text, nr_delegat text);";
     String CREATE_TABLE_FACTURI = "CREATE TABLE facturi(nume text NOT NULL,val text NOT NULL,nume_fisier text PRIMARY KEY, factura BOOLEAN);";
 
 
@@ -86,7 +86,11 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         item.put("nume", produs.getNume());
         item.put("cod", produs.getCod());
         item.put("pret", produs.getPret());
-        item.put("img", convert_bitmap_to_bytearr(produs.getImg()));
+
+        if(produs.getImg()!=null)
+            item.put("img", convert_bitmap_to_bytearr(produs.getImg()));
+        else
+            item.put("img", (byte[]) null);
 
         long result = db.insert("produse", null, item);
 
@@ -271,7 +275,12 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
                 String cod = (c.getString(c.getColumnIndex("cod")));
                 float pret = (c.getFloat(c.getColumnIndex("pret")));
 
-                Bitmap img = convert_bytearr_to_bitmap(c.getBlob(c.getColumnIndex("img")));
+                Bitmap img;
+
+                if(c.getBlob(c.getColumnIndex("img"))!= null)
+                    img = convert_bytearr_to_bitmap(c.getBlob(c.getColumnIndex("img")));
+                else
+                    img = null;
 
                 item = new data_class_produs(nume, cod, pret, img);
                 list.add(item);

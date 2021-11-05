@@ -23,8 +23,17 @@ public class data_class_produs
 
     public Bitmap getResizedBitmap(int maxSize) {
 
-        int width = img.getWidth();
-        int height = img.getHeight();
+        int width;
+        int height;
+
+        try{
+            width=img.getWidth();
+            height=img.getHeight();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
 
         float bitmapRatio = (float)width / (float) height;
         if (bitmapRatio > 1) {
@@ -35,9 +44,6 @@ public class data_class_produs
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(img, 40, 36, true);
-
-        //Bitmap b = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length)
-       // profileImage.setImageBitmap(Bitmap.createScaledBitmap(b, 120, 120, false));
     }
 
     public String getNume()

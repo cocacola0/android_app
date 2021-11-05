@@ -24,12 +24,16 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity{
     public DrawerLayout d;
     NavigationView n;
     public ActionBarDrawerToggle toggle;
     Toolbar t;
-    String PREF_FILE= "abonament";
+    String PREF_FILE= "MyPref";
+    boolean inactive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,7 +49,22 @@ public class MainActivity extends AppCompatActivity{
         if(!db_handler.check_account_exists())
             start_fg("pagina_inceput");
         else
-            start_fg("acasa");
+        {
+            String pattern = "MM/dd/yyyy";
+
+            String cur_date = new SimpleDateFormat(pattern).format(new Date());
+            String end_date = this.getSharedPreferences(PREF_FILE, 0).getString("sub_date",cur_date);
+
+            Utils u = new Utils(getApplicationContext());
+
+            if(u.check_date_greater(cur_date, end_date))
+                start_fg("acasa");
+            else
+            {
+                start_fg("abonament");
+                inactive = true;
+            }
+        }
 
         img_home();
     }
@@ -128,6 +147,9 @@ public class MainActivity extends AppCompatActivity{
 
     protected void start_fg(String fg_name)
     {
+        if(inactive)
+            return;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setReorderingAllowed(false);
@@ -188,10 +210,12 @@ public class MainActivity extends AppCompatActivity{
                 transaction.replace(R.id.layout_frame, fg_pagina_inceput.class, null);
                 change_toolbar(R.string.app_name);
                 break;
+
             case "despre":
                 transaction.replace(R.id.layout_frame, fg_despre.class, null);
                 change_toolbar(R.string.despre);
                 break;
+
             default:
                 transaction.replace(R.id.layout_frame, fg_acasa.class, null);
                 change_toolbar(R.string.app_name);
@@ -202,6 +226,9 @@ public class MainActivity extends AppCompatActivity{
 
     protected void start_fg_with_args(String fg_name, data_class_produs prod)
     {
+        if(inactive)
+            return;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setReorderingAllowed(false);
@@ -217,11 +244,14 @@ public class MainActivity extends AppCompatActivity{
             change_toolbar(R.string.app_name);
         }
 
-        transaction.commit();
+        transaction.addToBackStack(null).commit();
     }
 
     protected void start_fg_with_args(String fg_name, data_class_client client)
     {
+        if(inactive)
+            return;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setReorderingAllowed(false);
@@ -233,11 +263,34 @@ public class MainActivity extends AppCompatActivity{
         }
         else
         {
-                transaction.replace(R.id.layout_frame, fg_acasa.class, null);
-                change_toolbar(R.string.app_name);
+            transaction.replace(R.id.layout_frame, fg_acasa.class, null);
+            change_toolbar(R.string.app_name);
         }
 
-        transaction.commit();
+        transaction.addToBackStack(null).commit();
+    }
+
+    protected void start_fg_with_args(String fg_name, data_class_facturi factura)
+    {
+        if(inactive)
+            return;
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setReorderingAllowed(false);
+
+        if(fg_name.equals("pdf_viewer"))
+        {
+            transaction.replace(R.id.layout_frame, new fg_pdf_viewer(factura), null);
+            change_toolbar(R.string.pdf_viewer);
+        }
+        else
+        {
+            transaction.replace(R.id.layout_frame, fg_acasa.class, null);
+            change_toolbar(R.string.app_name);
+        }
+
+        transaction.addToBackStack(null).commit();
     }
 
     public void change_toolbar(int txt_resource)
@@ -246,6 +299,10 @@ public class MainActivity extends AppCompatActivity{
         txt_toolbar.setText(getResources().getText(txt_resource));
     }
 
+    public void setActive()
+    {
+        this.inactive = false;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

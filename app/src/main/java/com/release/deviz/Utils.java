@@ -40,5 +40,23 @@ public class Utils
         return true;
     }
 
+    boolean check_date_greater(String date1, String date2)
+    {
+        String[] cur_date_ = date1.split("/");
+        String[] end_date_ = date2.split("/");
+
+        int cm = Integer.parseInt(cur_date_[0]);
+        int cd = Integer.parseInt(cur_date_[1]);
+        int cy = Integer.parseInt(cur_date_[2]);
+
+        int em = Integer.parseInt(end_date_[0]);
+        int ed = Integer.parseInt(end_date_[1]);
+        int ey = Integer.parseInt(end_date_[2]);
+
+        if(cy < ey || (cy == ey && cm < em) || (cy == ey && cm == em && cd < ed))
+            return true;
+        else
+            return false;
+    }
 
 }

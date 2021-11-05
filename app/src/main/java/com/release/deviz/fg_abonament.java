@@ -63,7 +63,7 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
 
     LinearLayout l_trial, l_luna, l_an;
     Button btn_plateste;
-    TextView txt_data_final;
+    TextView txt_data_final, txt_sub_activa;
     LinearLayout last_selected;
     String selected;
     RelativeLayout frame;
@@ -153,6 +153,18 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
 
         btn_plateste = r_view.findViewById(R.id.fg_ab_cumpara);
         txt_data_final = r_view.findViewById(R.id.fg_ab_txt_data_final);
+        txt_sub_activa = r_view.findViewById(R.id.fg_ab_subscriptie_activa);
+
+        String pattern = "MM/dd/yyyy";
+        String cur_date = new SimpleDateFormat(pattern).format(new Date());
+        String end_date = getPreferenceObject().getString("sub_date",cur_date);
+
+        Utils u = new Utils(getContext());
+
+        if(u.check_date_greater(cur_date, end_date))
+            txt_sub_activa.setText("Subscripție activă");
+        else
+            txt_sub_activa.setText("Subscripție inactivă");
 
         txt_data_final.setText(getDateFromPref());
 
@@ -166,7 +178,7 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
                 public void onClick(View v) {
 
                     if(last_selected != null)
-                        last_selected.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        last_selected.setBackgroundResource(R.drawable.border_background);
 
                     l_trial.setBackgroundColor(Color.parseColor("#ADD8E6"));
                     last_selected = l_trial;
@@ -178,7 +190,7 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
             @Override
             public void onClick(View v) {
                 if(last_selected != null)
-                    last_selected.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    last_selected.setBackgroundResource(R.drawable.border_background);
 
                 l_luna.setBackgroundColor(Color.parseColor("#ADD8E6"));
                 last_selected = l_luna;
@@ -190,7 +202,7 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
             @Override
             public void onClick(View v) {
                 if(last_selected != null)
-                    last_selected.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    last_selected.setBackgroundResource(R.drawable.border_background);;
 
                 l_an.setBackgroundColor(Color.parseColor("#ADD8E6"));
                 last_selected = l_an;
@@ -218,15 +230,13 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
     {
         saveSubscribeItemValueToPref("trial", true);
         saveDateToPref("luna");
+
+        ((MainActivity) getActivity()).setActive();
         ((MainActivity) getActivity()).start_fg("acasa");
     }
 
     private void on_click(int position)
     {
-        if(getSubscribeItemValueFromPref(subcribeItemIDs.get(position))){
-            Toast.makeText(getContext(),subcribeItemIDs.get(position)+" is Already Subscribed",Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (billingClient.isReady()) {
             initiatePurchase(subcribeItemIDs.get(position));
         }
@@ -246,14 +256,6 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
                 }
             });
         }
-    }
-
-    private void notifyList(){
-        subscribeItemDisplay.clear();
-        for(String p:subcribeItemIDs){
-            subscribeItemDisplay.add("Subscribe Status of "+p+" = "+getSubscribeItemValueFromPref(p));
-        }
-        arrayAdapter.notifyDataSetChanged();
     }
 
     private SharedPreferences getPreferenceObject() {
@@ -413,6 +415,7 @@ public class fg_abonament extends Fragment implements PurchasesUpdatedListener
                                             else
                                                 saveDateToPref("an");
 
+                                            ((MainActivity) getActivity()).setActive();
                                             ((MainActivity) getActivity()).start_fg("acasa");
                                         }
                                     }

@@ -98,13 +98,16 @@ public class fg_delegati extends Fragment {
         String mij_transport = etxt_mij_transport_del.getText().toString();
         String nr_transport = etxt_nr_transport.getText().toString();
 
+        return new data_class_delegat(nume_del, cnp_del, ci_del, mij_transport, nr_transport);
+
+        /*
         Utils u = new Utils(getContext());
 
         if(u.check_string_non_empty(nume_del, "Nume delegat") && u.check_string_non_empty(cnp_del, "CNP delegat")
             && u.check_string_non_empty(ci_del, "CI delegat") && u.check_string_non_empty(mij_transport, "Mijloc transport") &&
             u.check_string_non_empty(nr_transport, "Nr Transport"))
             return new data_class_delegat(nume_del, cnp_del, ci_del, mij_transport, nr_transport);
-        return null;
+        return null;*/
     }
 
     void b_salveaza(View r_view)

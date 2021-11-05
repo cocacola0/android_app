@@ -2,6 +2,10 @@
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -37,13 +41,12 @@ public class Facturare
     ArrayList<data_class_produs> produse;
     data_class_cont cont;
     ArrayList<Integer> bucati;
-    Date currentTime;
     private BaseFont bfBold;
     private BaseFont bf;
-
+    data_class_facturi cls_factura;
 
     String nume_document;
-    int pg_height = 800, pg_width = 794;
+    int pg_height = 800;
     float table_total_width, table_total_height;
     float total_pret = 0;
     int left_margin = 38;
@@ -117,45 +120,82 @@ public class Facturare
 
     public void generate_head(Document doc, PdfContentByte cb, boolean factura)
     {
+        int current = 0;
+
         //Denumire cont
-        createHeadings(cb, cont.getDenumire(), left_margin, pg_height);
+        if(!cont.getDenumire().isEmpty()) {
+            createHeadings(cb, cont.getDenumire(), left_margin, pg_height);
+            current += 20;
+        }
 
         //CIF cont
-        createHeadings(cb,"CIF:", left_margin, pg_height-20);
-        createHeadings(cb,cont.getCif(), left_margin + 20, pg_height-20);
+        if(!cont.getCif().isEmpty()) {
+            createHeadings(cb, "CIF:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getCif(), left_margin + 20, pg_height - current);
+            current += 20;
+        }
 
         //Reg Com cont
-        createHeadings(cb,"Reg. Com.:", left_margin, pg_height-40);
-        createHeadings(cb,cont.getReg_com(), left_margin + 47, pg_height-40);
+        if(!cont.getReg_com().isEmpty()) {
+            createHeadings(cb, "Reg. Com.:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getReg_com(), left_margin + 47, pg_height - current);
+            current += 20;
+        }
 
         //Adresa + Oras cont
-        createHeadings(cb,"Adresa:", left_margin, pg_height-60);
-        createHeadings(cb,cont.getAdresa() + "," + cont.getLocalitate() + ",", left_margin + 36, pg_height-60);
+        if(!cont.getAdresa().isEmpty()) {
+            createHeadings(cb, "Adresa:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getAdresa() + "," + cont.getLocalitate() + ",", left_margin + 36, pg_height - current);
+            current += 20;
+        }
 
         //Bihor + Cod postal cont
-        createHeadings(cb,cont.getJudet() + ", " + cont.getCod_postal(), left_margin, pg_height-80);
+        if(!cont.getAdresa().isEmpty() && !cont.getCod_postal().isEmpty()) {
+            createHeadings(cb, cont.getJudet() + ", " + cont.getCod_postal(), left_margin, pg_height - current);
+            current += 20;
+        }
 
         //Telefon cont
-        createHeadings(cb,"Telefon:", left_margin, pg_height-100);
-        createHeadings(cb,cont.getTelefon(), left_margin + 38, pg_height-100);
+        if(!cont.getTelefon().isEmpty()) {
+            createHeadings(cb, "Telefon:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getTelefon(), left_margin + 38, pg_height - current);
+            current += 20;
+        }
 
         //Email cont
-        createHeadings(cb,"E-mail:", left_margin, pg_height-120);
-        createHeadings(cb,cont.getEmail(), left_margin + 33, pg_height-120);
+        if(!cont.getEmail().isEmpty()) {
+            createHeadings(cb, "E-mail:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getEmail(), left_margin + 33, pg_height - current);
+            current += 20;
+        }
 
         //Cont cont
-        createHeadings(cb,"Cont:", left_margin, pg_height-140);
-        createHeadings(cb,cont.getCont_bancar(), left_margin + 27, pg_height-140);
+        if(!cont.getCont_bancar().isEmpty()) {
+            createHeadings(cb, "Cont:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getCont_bancar(), left_margin + 27, pg_height - current);
+            current += 20;
+        }
 
         //Banca cont
-        createHeadings(cb,cont.getBanca(), left_margin, pg_height-160);
+        if(!cont.getCont_bancar().isEmpty()) {
+            createHeadings(cb, cont.getBanca(), left_margin, pg_height - current);
+            current += 20;
+        }
 
-        //Cont cont
-        createHeadings(cb,"Cota TVA:", left_margin, pg_height-180);
-        createHeadings(cb,cont.getCota_tva(), left_margin + 45, pg_height-180);
+        //TVA cont
+        if(!cont.getCota_tva().isEmpty()) {
+            createHeadings(cb, "Cota TVA:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getCota_tva(), left_margin + 45, pg_height - current);
+            current += 20;
+        }
 
-        createHeadings(cb,"Plata TVA:", left_margin, pg_height-200);
-        createHeadings(cb,cont.getTip_tva(), left_margin + 46, pg_height-200);
+        if(!cont.getTip_tva().isEmpty()) {
+            createHeadings(cb, "Plata TVA:", left_margin, pg_height - current);
+            createHeadings(cb, cont.getTip_tva(), left_margin + 46, pg_height - current);
+            current += 20;
+        }
+
+        current = 0;
 
         //TOP-RIGHT
         if(factura)
@@ -172,17 +212,34 @@ public class Facturare
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         createHeadings(cb,currentDate, second_column + 26, pg_height-45);
 
-        createHeadings(cb,"Client:", second_column, pg_height-65);
-        createHeadings(cb,client.getDenumire(), second_column, pg_height-85);
+        current = 65;
 
-        createHeadings(cb,"CIF:", second_column, pg_height-105);
-        createHeadings(cb,client.getCif(), second_column + 20, pg_height-105);
+        if(!client.getDenumire().isEmpty()) {
+            createHeadings(cb, "Client:", second_column, pg_height - current);
+            current += 20;
+            createHeadings(cb, client.getDenumire(), second_column, pg_height - current);
+            current += 20;
+        }
 
-        createHeadings(cb,"Reg. Com:", second_column, pg_height-125);
-        createHeadings(cb,client.getReg_com(), second_column + 47, pg_height-125);
+        if(!client.getCif().isEmpty()) {
+            createHeadings(cb, "CIF:", second_column, pg_height - current);
+            createHeadings(cb, client.getCif(), second_column + 20, pg_height - current);
 
-        createHeadings(cb,"Adresa:", second_column, pg_height-145);
-        createHeadings(cb,client.getAdresa() + "," + client.getLocalitate() + ",", second_column + 36, pg_height-145);
+            current += 20;
+        }
+
+        if(!client.getReg_com().isEmpty()) {
+            createHeadings(cb, "Reg. Com:", second_column, pg_height - current);
+            createHeadings(cb, client.getReg_com(), second_column + 47, pg_height - current);
+
+            current += 20;
+        }
+
+        if(!client.getAdresa().isEmpty()) {
+            createHeadings(cb, "Adresa:", second_column, pg_height - current);
+            createHeadings(cb, client.getAdresa() + "," + client.getLocalitate() + ",", second_column + 36, pg_height - current);
+            current += 20;
+        }
     }
 
     float two_decimals(float f)
@@ -254,10 +311,10 @@ public class Facturare
 
             total_pret += produs.getPret();
 
-            float pret_fara_tva = 100*produs.getPret()/119;
+            float pret_fara_tva = 100*produs.getPret()*buc/119;
             pret_fara_tva = two_decimals(pret_fara_tva);
 
-            float val_tva = produs.getPret()-pret_fara_tva;
+            float val_tva = produs.getPret()*buc-pret_fara_tva;
             val_tva = two_decimals(val_tva);
 
             table.addCell(String.valueOf(i));
@@ -268,7 +325,6 @@ public class Facturare
             table.addCell(Float.toString(buc*pret_fara_tva));
             table.addCell(Float.toString(val_tva));
         }
-        doc.add(table);
 
         table.setSplitLate(false);
         table.setSplitRows(true);
@@ -347,8 +403,10 @@ public class Facturare
     {
         MySqlliteDBHandler db_handler;
 
+        cls_factura = new data_class_facturi(nume, val, nume_fisier, factura);
         db_handler = new MySqlliteDBHandler(context, "facturi");
-        if(!db_handler.insert_facturi_data(new data_class_facturi(nume, val, nume_fisier, factura)))
+
+        if(!db_handler.insert_facturi_data(cls_factura))
             Toast.makeText(context, "eroare!", Toast.LENGTH_SHORT).show();
 
     }
@@ -435,24 +493,26 @@ public class Facturare
             buc = bucati.get(i);
             i = i+1;
 
-            total_pret += produs.getPret();
+            total_pret += produs.getPret()*buc;
 
             float pret_fara_tva = 100*produs.getPret()/119;
             pret_fara_tva = two_decimals(pret_fara_tva);
 
             float val_tva = produs.getPret()-pret_fara_tva;
-            val_tva = two_decimals(val_tva);
-
-            //img_prod.setImageBitmap(current_item.getImg());
+            val_tva = two_decimals(val_tva*buc);
 
             ByteArrayOutputStream stream=new ByteArrayOutputStream();
             Bitmap bmp_img = produs.getResizedBitmap(10);
-            bmp_img.compress(Bitmap.CompressFormat.PNG,100,stream);
-            Image logo=Image.getInstance(stream.toByteArray());
+            Image logo = null;
 
-            logo.setWidthPercentage(80);
-            logo.scaleToFit(38,38);
+            if(bmp_img != null)
+            {
+                bmp_img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                logo = Image.getInstance(stream.toByteArray());
 
+                logo.setWidthPercentage(80);
+                logo.scaleToFit(38, 38);
+            }
 
             table.addCell(String.valueOf(i));
             table.addCell(logo);
@@ -460,18 +520,13 @@ public class Facturare
             table.addCell("buc");
             table.addCell(String.valueOf(buc));
             table.addCell(Float.toString(pret_fara_tva));
-            table.addCell(Float.toString(buc*pret_fara_tva));
+            table.addCell(Float.toString(pret_fara_tva*buc));
             table.addCell(Float.toString(val_tva));
         }
-        //table.setKeepTogether(true);
         table.writeSelectedRows(0, -1, doc.leftMargin(), 575, docWriter.getDirectContent());
-        //docWriter.add(table);
-        //doc.add(table);
 
         table_total_width = table.getTotalWidth();
         table_total_height = table.getTotalHeight();
-
-        //float[] columnWidths = {0.7f,3f, 5f, 1f, 1f, 2f, 1.5f, 2f};
 
         double w_0 = doc.leftMargin();
         double w_1 = w_0 + 0.7*table_total_width/16.2;
@@ -550,7 +605,7 @@ public class Facturare
         }
     }
 
-    public void get_oferta_pdf(boolean factura)
+    public data_class_facturi get_oferta_pdf(boolean factura)
     {
         Document document = new Document();
 
@@ -584,19 +639,12 @@ public class Facturare
             generate_down_table(document, cb);
 
             document.close();
-            if(factura)
-                Toast.makeText(context, "Factură generată în folderul descărcări!", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(context, "Ofertă generată în folderul descărcări!", Toast.LENGTH_LONG).show();
         }
         catch (FileNotFoundException | DocumentException e)
         {
             e.printStackTrace();
         }
-    }
 
-    public void get_factura_pdf()
-    {
-
+        return cls_factura;
     }
 }

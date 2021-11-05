@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="4"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/selecteaza_client"
                 android:theme="@style/TextViewGetText"
                 android:textAlignment="center"/>
@@ -53,7 +53,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="4"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/selecteaza_produs"
                 android:theme="@style/TextViewGetText"
                 android:textAlignment="center"/>

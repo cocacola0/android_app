@@ -33,10 +33,7 @@ public class fg_oferte extends Fragment
 
     Button b_trimite;
 
-    Boolean cl_first = false, pr_first = false;
     Boolean factura = false;
-
-    String discount;
 
     public fg_oferte() {
         // Required empty public constructor
@@ -115,6 +112,33 @@ public class fg_oferte extends Fragment
         produse_nume = get_produse_nume();
     }
 
+    boolean check_exits()
+    {
+        MySqlliteDBHandler db_cont = new MySqlliteDBHandler(getContext(), "cont");
+        MySqlliteDBHandler db_delegat = new MySqlliteDBHandler(getContext(), "delegati");
+
+        data_class_cont cont = db_cont.get_cont_from_table();
+        data_class_delegat delegat = db_delegat.get_delegat_from_table();
+
+        if(cont == null)
+        {
+            Toast.makeText(getContext(), "Introdu date cont!", Toast.LENGTH_SHORT).show();
+            ((MainActivity)getActivity()).start_fg("contul_meu");
+
+            return false;
+        }
+
+        if(delegat == null)
+        {
+            Toast.makeText(getContext(), "Introdu date cont!", Toast.LENGTH_SHORT).show();
+            ((MainActivity)getActivity()).start_fg("delegati");
+
+            return false;
+        }
+
+        return true;
+    }
+
     ArrayList<String> get_clienti_nume()
     {
         ArrayList<String> list = new ArrayList<>();
@@ -152,7 +176,6 @@ public class fg_oferte extends Fragment
             curr_clienti.add(clienti.get(position));
             clienti_adapter.notifyDataSetChanged();
 
-            //String nume = clienti.get(pos).getDenumire();
             cl_sp_adapter.remove(clienti.get(position).getDenumire());
             sp_clienti.setSelection(0);
             cl_sp_adapter.notifyDataSetChanged();
@@ -285,13 +308,18 @@ public class fg_oferte extends Fragment
                     if(curr_produse.size() == 0)
                         Toast.makeText(getContext(), "Introduceți clienti!" , Toast.LENGTH_SHORT).show();
                     else
-                        for(data_class_client client:curr_clienti)
+                        if(check_exits())
                         {
-                            Facturare fac = new Facturare(getContext(), client, curr_produse, bucati);
-                            fac.get_oferta_pdf(factura);
+                            for(data_class_client client:curr_clienti)
+                            {
+                                Facturare fac = new Facturare(getContext(), client, curr_produse, bucati);
 
-                            ((MainActivity)getActivity()).start_fg("acasa");
+                                data_class_facturi fact = fac.get_oferta_pdf(factura);
+
+                                ((MainActivity)getActivity()).start_fg_with_args("pdf_viewer", fact);
+                            }
                         }
+
             }
         });
     }

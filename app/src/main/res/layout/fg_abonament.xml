@@ -8,143 +8,157 @@
     android:id="@+id/fg_ab_frame"
     tools:context=".fg_abonament">
 
-    <TextView
-        android:layout_alignParentTop="true"
-        android:id="@+id/fg_ab_subscriptie_activa"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:text="Subcripție activă"
-        android:textAlignment="center"
-        android:layout_margin="10dp"/>
-
-    <LinearLayout
-        android:layout_below="@+id/fg_ab_subscriptie_activa"
-        android:id="@+id/fg_ab_ll_data_final"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="40dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="dată final"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:id="@+id/fg_ab_txt_data_final"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="7/30/2021"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/fg_ab_selecteaza_subscriptie"
-        android:layout_below="@id/fg_ab_ll_data_final"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:text="Selectează subscripție!"
-        android:textAlignment="center"
-        android:layout_margin="10dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fg_ab_lista_preturi"
-        android:layout_below="@id/fg_ab_selecteaza_subscriptie"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
         <LinearLayout
-            android:id="@+id/fg_abonament_ll_trial"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="0dp"
+                android:layout_alignParentTop="true"
+                android:id="@+id/fg_ab_subscriptie_activa"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/trial"
-                android:textSize="20sp"
+                android:textSize="25sp"
+                android:text="Subcripție activă"
                 android:textAlignment="center"
                 android:layout_margin="10dp"/>
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_below="@+id/fg_ab_subscriptie_activa"
+                android:id="@+id/fg_ab_ll_data_final"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/gratuit"
-                android:textSize="20sp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="40dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="dată final"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/fg_ab_txt_data_final"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="7/30/2021"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/fg_ab_selecteaza_subscriptie"
+                android:layout_below="@id/fg_ab_ll_data_final"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="Selectează subscripție!"
                 android:textAlignment="center"
                 android:layout_margin="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/fg_ab_lista_preturi"
+                android:layout_below="@id/fg_ab_selecteaza_subscriptie"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/fg_abonament_ll_trial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:background="@drawable/border_background"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/trial"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:layout_margin="10dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/gratuit"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fg_abonament_ll_1_luna"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:background="@drawable/border_background"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/o_luna"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:layout_margin="10dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="8.99 lei"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fg_abonament_ll_1_an"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:background="@drawable/border_background"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/un_an"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:layout_margin="10dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="99.99 lei"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/fg_abonament_ll_1_luna"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/o_luna"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:layout_margin="10dp"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="19.99 lei"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:layout_margin="10dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/fg_abonament_ll_1_an"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/un_an"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:layout_margin="10dp"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="184.99 lei"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:layout_margin="10dp"/>
-        </LinearLayout>
-    </LinearLayout>
-
+    </ScrollView>
     <Button
         android:id="@+id/fg_ab_cumpara"
         android:layout_width="match_parent"

@@ -142,6 +142,8 @@ public class fg_contul_meu extends Fragment
         String cota_tva = etxt_cota_tva.getText().toString();
         String tip_tva = etxt_tip_tva.getText().toString();
 
+        return new data_class_cont(denumire, cif, reg_com, plat_tva_da, cap_social, localitate, judet, adresa, cod_postal, telefon, email, cont_bancar, banca, cota_tva, tip_tva);
+        /*
         Utils u = new Utils(getContext());
 
         if(u.check_string_non_empty(denumire, "denumire") && u.check_string_non_empty(cif, "cif") && u.check_string_non_empty(reg_com, "reg com") &&
@@ -154,7 +156,7 @@ public class fg_contul_meu extends Fragment
 
             return new data_class_cont(denumire, cif, reg_com, plat_tva_da, cap_social, localitate, judet, adresa, cod_postal, telefon, email, cont_bancar, banca, cota_tva, tip_tva);
 
-        return null;
+        return null;*/
     }
 
     void cb_plat_tva_da(View r_view)

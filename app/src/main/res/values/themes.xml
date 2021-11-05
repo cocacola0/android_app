@@ -25,6 +25,12 @@
         <item name="android:layout_margin">10dp</item>
     </style>
 
+    <style name="MediumButton">
+        <item name="android:textSize">15sp</item>
+        <item name="android:padding">20dip</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
     <style name="TextViewGetText">
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">center</item>
