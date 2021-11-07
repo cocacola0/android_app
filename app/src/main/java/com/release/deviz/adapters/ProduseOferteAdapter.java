@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_produs;
 
 import java.util.ArrayList;
 

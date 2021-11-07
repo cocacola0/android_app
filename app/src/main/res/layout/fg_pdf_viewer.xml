@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fg_pdf_viewer">
+    tools:context=".fragments.fg_pdf_viewer">
 
     <ImageView
         android:layout_above="@id/ll_buttons_pdf_viewer"

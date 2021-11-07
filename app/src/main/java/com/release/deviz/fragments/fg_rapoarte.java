@@ -1,35 +1,23 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
-import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
-
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.pdf.PdfRenderer;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.io.File;
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.R;
+import com.release.deviz.adapters.RapoarteAdapter;
+import com.release.deviz.dataClasses.data_class_facturi;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class fg_rapoarte extends Fragment
 {

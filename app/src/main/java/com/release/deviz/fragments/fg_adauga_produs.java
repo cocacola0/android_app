@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,15 +22,25 @@ import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.R;
+import com.release.deviz.Utils;
+import com.release.deviz.dataClasses.data_class_produs;
+import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
+
 public class fg_adauga_produs extends Fragment
 {
     EditText etxt_nume, etxt_cod, etxt_pret;
     Button b_adauga_produs, b_incarca;
     ImageView img_produs;
+
+    MySqlliteDBHandler sql_db_handler;
+    SharedPrefferencesHandler shared_pref_handler;
+
     private static final int GALLERY_REQUEST_CODE = 123;
     data_class_produs prod;
     boolean modifica = false;
-
 
     public fg_adauga_produs()
     {
@@ -63,6 +73,9 @@ public class fg_adauga_produs extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View r_view = inflater.inflate(R.layout.fg_adauga_produs, container, false);
+
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "produse");
+        shared_pref_handler = new SharedPrefferencesHandler(getContext());
 
         b_incarca = r_view.findViewById(R.id.txt_incarca_imagine);
         b_adauga_produs = r_view.findViewById(R.id.btn_adauga_produs);
@@ -141,12 +154,11 @@ public class fg_adauga_produs extends Fragment
         data_class_produs item = get_produs_info();
 
         if(item != null) {
-            MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "produse");
-
-            boolean succeded = db_handler.insert_product_data(item);
+            boolean succeded = sql_db_handler.insert_data(item);
 
             if (succeded) {
                 show_toast("Inserare reușită!");
+                shared_pref_handler.put_bool("produse");
                 ((MainActivity) getActivity()).start_fg("produse");
 
             } else
@@ -161,9 +173,7 @@ public class fg_adauga_produs extends Fragment
 
         if(item != null)
         {
-            MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "produse");
-
-            boolean succeded = db_handler.modify_product_data(prod, item);
+            boolean succeded = sql_db_handler.modify_data(prod, item);
 
             if (succeded) {
                 show_toast("Modificare reușită!");

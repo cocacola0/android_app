@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.adapters.ProduseAdapter;
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_produs;
+
 import java.util.ArrayList;
 
 
@@ -24,6 +30,8 @@ public class fg_produse extends Fragment
     ProduseAdapter adapter;
     View previous_selected;
     int selected_index = -1;
+
+    MySqlliteDBHandler sql_db_handler;
 
     public fg_produse() {
         // Required empty public constructor
@@ -51,6 +59,8 @@ public class fg_produse extends Fragment
                              Bundle savedInstanceState)
     {
         View r_view = inflater.inflate(R.layout.fg_produse, container, false);
+
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "produse");
 
         lst_view(r_view);
         b_adauga(r_view);
@@ -103,8 +113,7 @@ public class fg_produse extends Fragment
             {
                 if(selected_index != -1)
                 {
-                    MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "produse");
-                    boolean result = db_handler.delete_product_data(list.get(selected_index));
+                    boolean result = sql_db_handler.delete_data(list.get(selected_index));
 
                     if(result)
                     {
@@ -124,9 +133,8 @@ public class fg_produse extends Fragment
     {
         lst_view = r_view.findViewById(R.id.lst_prod_produse);
 
-        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "produse");
+        list = sql_db_handler.get_items_from_table_produse();
 
-        list = db_handler.get_items_from_table();
         adapter = new ProduseAdapter(getContext(), list);
 
         lst_view.setAdapter(adapter);

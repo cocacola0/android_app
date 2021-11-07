@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.os.Bundle;
 
@@ -11,10 +11,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_delegat;
+import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
+
 
 public class fg_delegati extends Fragment {
     Button b_salveaza;
     EditText etxt_nume_del, etxt_cnp_del, etxt_ci_del, etxt_mij_transport_del, etxt_nr_transport;
+
+    SharedPrefferencesHandler shared_pref_handler;
+    MySqlliteDBHandler sql_db_handler;
 
     data_class_delegat delegat;
     boolean exists = false;
@@ -45,29 +54,19 @@ public class fg_delegati extends Fragment {
 
         View r_view =  inflater.inflate(R.layout.fg_delegati, container, false);
 
-        if(check_if_exists())
+        shared_pref_handler = new SharedPrefferencesHandler(getContext());
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "delegati");
+
+        if(shared_pref_handler.check_bool("delegati"))
         {
             exists = true;
-            delegat = get_delegat();
+            delegat = sql_db_handler.get_delegat_from_table();
         }
 
         init(r_view);
         b_salveaza(r_view);
 
         return r_view;
-    }
-
-    private boolean check_if_exists()
-    {
-        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "delegati");
-
-        return db_handler.check_delegat_exists();
-    }
-
-    data_class_delegat get_delegat()
-    {
-        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "delegati");
-        return db_handler.get_delegat_from_table();
     }
 
     void init(View r_view)
@@ -99,15 +98,6 @@ public class fg_delegati extends Fragment {
         String nr_transport = etxt_nr_transport.getText().toString();
 
         return new data_class_delegat(nume_del, cnp_del, ci_del, mij_transport, nr_transport);
-
-        /*
-        Utils u = new Utils(getContext());
-
-        if(u.check_string_non_empty(nume_del, "Nume delegat") && u.check_string_non_empty(cnp_del, "CNP delegat")
-            && u.check_string_non_empty(ci_del, "CI delegat") && u.check_string_non_empty(mij_transport, "Mijloc transport") &&
-            u.check_string_non_empty(nr_transport, "Nr Transport"))
-            return new data_class_delegat(nume_del, cnp_del, ci_del, mij_transport, nr_transport);
-        return null;*/
     }
 
     void b_salveaza(View r_view)
@@ -131,12 +121,12 @@ public class fg_delegati extends Fragment {
         data_class_delegat item = get_delegat_info();
 
         if(item != null) {
-            MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "delegati");
-
-            boolean succeded = db_handler.insert_delegat_data(item);
+            boolean succeded = sql_db_handler.insert_data(item);
 
             if (succeded) {
                 Toast.makeText(getContext(), "Inserare reușită!", Toast.LENGTH_SHORT).show();
+
+                shared_pref_handler.put_bool("delegati");
                 ((MainActivity) getActivity()).start_fg("acasa");
 
             } else
@@ -149,9 +139,7 @@ public class fg_delegati extends Fragment {
         data_class_delegat item = get_delegat_info();
 
         if(item != null) {
-            MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "delegati");
-
-            boolean succeded = db_handler.modify_delegat_data(delegat, item);
+            boolean succeded = sql_db_handler.modify_data(delegat, item);
 
             if (succeded) {
                 Toast.makeText(getContext(), "Modificare reușită!", Toast.LENGTH_SHORT).show();

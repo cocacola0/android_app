@@ -1,6 +1,9 @@
-package com.release.deviz;
+package com.release.deviz.dataClasses;
 
+import android.content.ContentValues;
 import android.graphics.Bitmap;
+
+import java.io.ByteArrayOutputStream;
 
 public class data_class_produs
 {
@@ -8,8 +11,6 @@ public class data_class_produs
     private float pret;
 
     private Bitmap img;
-    private int img_height = 100;
-    private int img_width = 75;
 
     public data_class_produs(String nume, String cod, float pret, Bitmap img)
     {
@@ -18,7 +19,14 @@ public class data_class_produs
         this.pret = pret;   
         this.img = img;
 
-        //lower_resolution();
+    }
+
+    public data_class_produs(data_class_produs produs)
+    {
+        this.nume = produs.nume;
+        this.cod = produs.cod;
+        this.pret = produs.pret;
+        this.img = produs.img;
     }
 
     public Bitmap getResizedBitmap(int maxSize) {
@@ -84,5 +92,29 @@ public class data_class_produs
     public void setImg(Bitmap img)
     {
         this.img = img;
+    }
+
+    public ContentValues get_cv()
+    {
+        ContentValues item = new ContentValues();
+
+        item.put("nume", getNume());
+        item.put("cod", getCod());
+        item.put("pret", getPret());
+
+        if(getImg()!=null)
+            item.put("img", convert_bitmap_to_bytearr(getImg()));
+        else
+            item.put("img", (byte[]) null);
+
+        return item;
+    }
+
+    private byte[] convert_bitmap_to_bytearr(Bitmap img)
+    {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+
+        return byteArrayOutputStream.toByteArray();
     }
 }

@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.release.deviz.adapters.ClientiExpandableAdapter;
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_client;
+
 import java.util.ArrayList;
 
 
@@ -24,6 +30,8 @@ public class fg_clienti extends Fragment {
     ClientiExpandableAdapter adapter;
     View previous_selected;
     int selected_index = -1;
+
+    MySqlliteDBHandler sql_db_handler;
 
     public fg_clienti() {
         // Required empty public constructor
@@ -50,8 +58,9 @@ public class fg_clienti extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View r_view = inflater.inflate(R.layout.fg_clienti, container, false);
+
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "clienti");
 
         exp_lst(r_view);
 
@@ -103,8 +112,7 @@ public class fg_clienti extends Fragment {
             public void onClick(View v) {
                 if(selected_index != -1)
                 {
-                    MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "clienti");
-                    boolean result = db_handler.delete_client_data(list.get(selected_index));
+                    boolean result = sql_db_handler.delete_data(list.get(selected_index));
 
                     if(result)
                     {
@@ -124,9 +132,8 @@ public class fg_clienti extends Fragment {
     {
         exp_lst = r_view.findViewById(R.id.exp_lst_clienti);
 
-        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "clienti");
+        list = sql_db_handler.get_items_from_table_clients();
 
-        list = db_handler.get_items_from_table_clients();
         adapter = new ClientiExpandableAdapter(getContext(), list);
 
         exp_lst.setAdapter(adapter);

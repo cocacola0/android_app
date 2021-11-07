@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.os.Bundle;
 
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.release.deviz.MainActivity;
+import com.release.deviz.R;
 
 public class fg_acasa extends Fragment
 {

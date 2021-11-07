@@ -1,35 +1,31 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebViewFragment;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_facturi;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 public class fg_pdf_viewer extends Fragment
@@ -37,6 +33,9 @@ public class fg_pdf_viewer extends Fragment
     data_class_facturi factura;
     ImageView img;
     Button btn_sterge, btn_salveaza, btn_trimite;
+
+    MySqlliteDBHandler sql_db_handler;
+
     String full_path;
 
     public fg_pdf_viewer() {
@@ -62,6 +61,8 @@ public class fg_pdf_viewer extends Fragment
                              Bundle savedInstanceState) {
         View r_view = inflater.inflate(R.layout.fg_pdf_viewer, container, false);
 
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "facturi");
+
         img = r_view.findViewById(R.id.img_pdf_view);
 
         btn_sterge = r_view.findViewById(R.id.btn_fac_sterge);
@@ -71,8 +72,7 @@ public class fg_pdf_viewer extends Fragment
         btn_sterge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "facturi");
-                boolean result = db_handler.delete_facturi_data(factura);
+                boolean result = sql_db_handler.delete_data(factura);
                 ((MainActivity) getActivity()).start_fg("rapoarte");
             }
         });

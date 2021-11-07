@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.dataClasses;
 
 import android.content.ContentValues;
 

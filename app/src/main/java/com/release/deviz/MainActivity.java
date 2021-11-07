@@ -12,17 +12,32 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.release.deviz.dataClasses.data_class_client;
+import com.release.deviz.dataClasses.data_class_facturi;
+import com.release.deviz.dataClasses.data_class_produs;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
+import com.release.deviz.fragments.fg_abonament;
+import com.release.deviz.fragments.fg_acasa;
+import com.release.deviz.fragments.fg_adauga_client;
+import com.release.deviz.fragments.fg_adauga_produs;
+import com.release.deviz.fragments.fg_clienti;
+import com.release.deviz.fragments.fg_contul_meu;
+import com.release.deviz.fragments.fg_delegati;
+import com.release.deviz.fragments.fg_despre;
+import com.release.deviz.fragments.fg_oferte;
+import com.release.deviz.fragments.fg_pagina_inceput;
+import com.release.deviz.fragments.fg_pdf_viewer;
+import com.release.deviz.fragments.fg_produse;
+import com.release.deviz.fragments.fg_rapoarte;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,9 +59,8 @@ public class MainActivity extends AppCompatActivity{
 
         setup_drawer_layout();
 
-        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getApplicationContext(), "cont");
-
-        if(!db_handler.check_account_exists())
+        SharedPrefferencesHandler shared_pref_handler = new SharedPrefferencesHandler(getApplicationContext());
+        if(!shared_pref_handler.check_bool("cont"))
             start_fg("pagina_inceput");
         else
         {
@@ -145,7 +159,7 @@ public class MainActivity extends AppCompatActivity{
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
     }
 
-    protected void start_fg(String fg_name)
+    public void start_fg(String fg_name)
     {
         if(inactive)
             return;
@@ -224,7 +238,7 @@ public class MainActivity extends AppCompatActivity{
         transaction.addToBackStack(null).commit();
     }
 
-    protected void start_fg_with_args(String fg_name, data_class_produs prod)
+    public void start_fg_with_args(String fg_name, data_class_produs prod)
     {
         if(inactive)
             return;
@@ -247,7 +261,7 @@ public class MainActivity extends AppCompatActivity{
         transaction.addToBackStack(null).commit();
     }
 
-    protected void start_fg_with_args(String fg_name, data_class_client client)
+    public void start_fg_with_args(String fg_name, data_class_client client)
     {
         if(inactive)
             return;
@@ -270,7 +284,7 @@ public class MainActivity extends AppCompatActivity{
         transaction.addToBackStack(null).commit();
     }
 
-    protected void start_fg_with_args(String fg_name, data_class_facturi factura)
+    public void start_fg_with_args(String fg_name, data_class_facturi factura)
     {
         if(inactive)
             return;

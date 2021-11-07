@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fg_ab_frame"
-    tools:context=".fg_abonament">
+    tools:context=".fragments.fg_abonament">
 
     <ScrollView
         android:layout_width="match_parent"

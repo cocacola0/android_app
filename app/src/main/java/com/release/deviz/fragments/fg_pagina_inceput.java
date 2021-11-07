@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.os.Bundle;
 
@@ -8,6 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.release.deviz.MainActivity;
+import com.release.deviz.R;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
 
 public class fg_pagina_inceput extends Fragment {
     Button btn_creeaza_cont, btn_despre;

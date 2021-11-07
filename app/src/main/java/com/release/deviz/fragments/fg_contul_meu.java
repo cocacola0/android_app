@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.os.Bundle;
 
@@ -12,12 +12,21 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_cont;
+import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
+
 public class fg_contul_meu extends Fragment
 {
     Button b_salveaza;
     EditText etxt_denumire, etxt_cif, etxt_reg_com, etxt_cap_social, etxt_localitate, etxt_judet, etxt_adresa, etxt_cod_postal, etxt_telefon, etxt_email, etxt_cont_bancar, etxt_banca, etxt_cota_tva, etxt_tip_tva;
     CheckBox cb_plat_tva_da, cb_plat_tva_nu;
     boolean plat_tva_da, plat_tva_nu;
+
+    SharedPrefferencesHandler shared_pref_handler;
+    MySqlliteDBHandler sql_db_handler;
 
     data_class_cont cont;
     boolean exists = false;
@@ -49,10 +58,13 @@ public class fg_contul_meu extends Fragment
     {
         View r_view =  inflater.inflate(R.layout.fg_contul_meu, container, false);
 
-        if(check_if_exists())
+        shared_pref_handler = new SharedPrefferencesHandler(getContext());
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "cont");
+
+        if(shared_pref_handler.check_bool("cont"))
         {
             exists = true;
-            cont = get_cont();
+            cont = sql_db_handler.get_cont_from_table();
         }
 
         init(r_view);
@@ -61,18 +73,6 @@ public class fg_contul_meu extends Fragment
         b_salveaza(r_view);
 
         return r_view;
-    }
-    private boolean check_if_exists()
-    {
-        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "cont");
-
-        return db_handler.check_account_exists();
-    }
-
-    data_class_cont get_cont()
-    {
-        MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "cont");
-        return db_handler.get_cont_from_table();
     }
 
     void init(View r_view)
@@ -143,20 +143,6 @@ public class fg_contul_meu extends Fragment
         String tip_tva = etxt_tip_tva.getText().toString();
 
         return new data_class_cont(denumire, cif, reg_com, plat_tva_da, cap_social, localitate, judet, adresa, cod_postal, telefon, email, cont_bancar, banca, cota_tva, tip_tva);
-        /*
-        Utils u = new Utils(getContext());
-
-        if(u.check_string_non_empty(denumire, "denumire") && u.check_string_non_empty(cif, "cif") && u.check_string_non_empty(reg_com, "reg com") &&
-            u.check_string_non_empty(cap_social, "capital social") && u.check_string_non_empty(localitate, "localitate") &&
-            u.check_string_non_empty(judet, "judet") && u.check_string_non_empty(adresa, "adresa") &&
-            u.check_string_non_empty(cod_postal, "cod postal") && u.check_string_non_empty(telefon, "telefon") &&
-            u.check_string_non_empty(email, "email") && u.check_string_non_empty(cont_bancar, "cont") &&
-            u.check_string_non_empty(banca, "banca") && u.check_string_non_empty(cota_tva, "cota tva") &&
-            u.check_string_non_empty(tip_tva, "tip tva") && (plat_tva_nu || plat_tva_da))
-
-            return new data_class_cont(denumire, cif, reg_com, plat_tva_da, cap_social, localitate, judet, adresa, cod_postal, telefon, email, cont_bancar, banca, cota_tva, tip_tva);
-
-        return null;*/
     }
 
     void cb_plat_tva_da(View r_view)
@@ -203,12 +189,12 @@ public class fg_contul_meu extends Fragment
         data_class_cont item = get_cont_info();
 
         if(item != null) {
-            MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "cont");
-
-            boolean succeded = db_handler.insert_cont_data(item);
+            boolean succeded = sql_db_handler.insert_data(item);
 
             if (succeded) {
                 Toast.makeText(getContext(), "Inserare reușită!", Toast.LENGTH_SHORT).show();
+
+                shared_pref_handler.put_bool("cont");
                 ((MainActivity) getActivity()).start_fg("delegati");
 
             } else
@@ -221,9 +207,7 @@ public class fg_contul_meu extends Fragment
         data_class_cont item = get_cont_info();
 
         if(item != null) {
-            MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "cont");
-
-            boolean succeded = db_handler.modify_cont_data(cont, item);
+            boolean succeded = sql_db_handler.modify_data(cont, item);
 
             if (succeded) {
                 Toast.makeText(getContext(), "Modificare reușită!", Toast.LENGTH_SHORT).show();

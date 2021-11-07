@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.os.Bundle;
 
@@ -14,7 +14,22 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.release.deviz.adapters.ClientiOferteAdapter;
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.adapters.ProduseOferteAdapter;
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_client;
+import com.release.deviz.dataClasses.data_class_cont;
+import com.release.deviz.dataClasses.data_class_delegat;
+import com.release.deviz.dataClasses.data_class_produs;
+import com.release.deviz.dataClasses.data_class_produs_pdf;
+import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
+import com.release.deviz.generateDocument.Facturare;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class fg_oferte extends Fragment
 {
@@ -30,6 +45,9 @@ public class fg_oferte extends Fragment
     ClientiOferteAdapter clienti_adapter;
     ProduseOferteAdapter produse_adapter;
     ArrayAdapter<CharSequence> cl_sp_adapter;
+
+    SharedPrefferencesHandler shared_pref_handler;
+    MySqlliteDBHandler sql_db_handler;
 
     Button b_trimite;
 
@@ -69,16 +87,20 @@ public class fg_oferte extends Fragment
         // Inflate the layout for this fragment
         View r_view = inflater.inflate(R.layout.fg_oferte, container, false);
 
-        init(r_view);
-        get_data_from_db();
+        shared_pref_handler = new SharedPrefferencesHandler(getContext());
 
-        init_lst_cl();
-        init_lst_pr();
+        if(check_exits()) {
+            init(r_view);
+            get_data_from_db();
 
-        init_spinner_cl();
-        init_spinner_pr();
+            init_lst_cl();
+            init_lst_pr();
 
-        b_trimite();
+            init_spinner_cl();
+            init_spinner_pr();
+
+            b_trimite();
+        }
 
         return r_view;
     }
@@ -100,13 +122,11 @@ public class fg_oferte extends Fragment
 
     void get_data_from_db()
     {
-        MySqlliteDBHandler db_handler;
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "produse");
+        produse = sql_db_handler.get_items_from_table_produse();
 
-        db_handler = new MySqlliteDBHandler(getContext(), "produse");
-        produse = db_handler.get_items_from_table();
-
-        db_handler = new MySqlliteDBHandler(getContext(), "clienti");
-        clienti = db_handler.get_items_from_table_clients();
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "clienti");
+        clienti = sql_db_handler.get_items_from_table_clients();
 
         clienti_nume = get_clienti_nume();
         produse_nume = get_produse_nume();
@@ -114,13 +134,7 @@ public class fg_oferte extends Fragment
 
     boolean check_exits()
     {
-        MySqlliteDBHandler db_cont = new MySqlliteDBHandler(getContext(), "cont");
-        MySqlliteDBHandler db_delegat = new MySqlliteDBHandler(getContext(), "delegati");
-
-        data_class_cont cont = db_cont.get_cont_from_table();
-        data_class_delegat delegat = db_delegat.get_delegat_from_table();
-
-        if(cont == null)
+        if(!shared_pref_handler.check_bool("cont"))
         {
             Toast.makeText(getContext(), "Introdu date cont!", Toast.LENGTH_SHORT).show();
             ((MainActivity)getActivity()).start_fg("contul_meu");
@@ -128,14 +142,29 @@ public class fg_oferte extends Fragment
             return false;
         }
 
-        if(delegat == null)
+        if(!shared_pref_handler.check_bool("delegati"))
         {
-            Toast.makeText(getContext(), "Introdu date cont!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Introdu date delegat!", Toast.LENGTH_SHORT).show();
             ((MainActivity)getActivity()).start_fg("delegati");
 
             return false;
         }
 
+        if(!shared_pref_handler.check_bool("produse"))
+        {
+            Toast.makeText(getContext(), "Introdu produse!", Toast.LENGTH_SHORT).show();
+            ((MainActivity)getActivity()).start_fg("produse");
+
+            return false;
+        }
+
+        if(!shared_pref_handler.check_bool("clienti"))
+        {
+            Toast.makeText(getContext(), "Introdu clienti!", Toast.LENGTH_SHORT).show();
+            ((MainActivity)getActivity()).start_fg("clienti");
+
+            return false;
+        }
         return true;
     }
 
@@ -303,24 +332,67 @@ public class fg_oferte extends Fragment
             public void onClick(View v)
             {
                 if(curr_clienti.size() == 0)
-                    Toast.makeText(getContext(), "Introduceți produse!" , Toast.LENGTH_SHORT).show();
-                else
-                    if(curr_produse.size() == 0)
-                        Toast.makeText(getContext(), "Introduceți clienti!" , Toast.LENGTH_SHORT).show();
-                    else
-                        if(check_exits())
-                        {
-                            for(data_class_client client:curr_clienti)
-                            {
-                                Facturare fac = new Facturare(getContext(), client, curr_produse, bucati);
+                {
+                    Toast.makeText(getContext(), "Introduceți produse!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                                data_class_facturi fact = fac.get_oferta_pdf(factura);
+                if(curr_produse.size() == 0)
+                {
+                    Toast.makeText(getContext(), "Introduceți clienti!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                                ((MainActivity)getActivity()).start_fg_with_args("pdf_viewer", fact);
-                            }
-                        }
+                ArrayList<data_class_produs_pdf> list_produse = new ArrayList<>();
 
+                for(int i = 0; i<curr_produse.size(); i++)
+                    list_produse.add(new data_class_produs_pdf(curr_produse.get((i)),bucati.get(i)));
+
+                for(data_class_client client:curr_clienti)
+                {
+                    launch_factura(list_produse, client);
+                }
             }
         });
+    }
+    String get_name_from_current_time()
+    {
+        String pattern = "dd_MM_yyyy_hh_mm_ss";
+
+        if(factura)
+            return "factura_" + new SimpleDateFormat(pattern).format(new Date()) + ".pdf";
+        else
+            return "oferta_" + new SimpleDateFormat(pattern).format(new Date()) + ".pdf";
+
+    }
+
+    void launch_factura(ArrayList<data_class_produs_pdf> list_produse, data_class_client client)
+    {
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "cont");
+        data_class_cont cont = sql_db_handler.get_cont_from_table();
+        String doc_name = get_name_from_current_time();
+
+        Facturare f;
+        if(!factura){
+            f = new Facturare(getContext(), doc_name, client, cont, list_produse);
+        }
+        else {
+            sql_db_handler = new MySqlliteDBHandler(getContext(), "delegati");
+            data_class_delegat delegat = sql_db_handler.get_delegat_from_table();
+            int nr_factura = shared_pref_handler.check_int("nr_factura");
+
+            f = new Facturare(getContext(), doc_name, client, cont, delegat, list_produse, nr_factura);
+
+            shared_pref_handler.iterate_int("nr_factura");
+        }
+
+        //Save to DB
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "facturi");
+
+        if(sql_db_handler.insert_data(f.output_factura_info))
+            ((MainActivity)getActivity()).start_fg_with_args("pdf_viewer", f.output_factura_info);
+        else
+            Toast.makeText(getContext(), "eroare!", Toast.LENGTH_SHORT).show();
+
     }
 }

@@ -12,7 +12,7 @@ public class Utils
         this.c = c;
     }
 
-    boolean check_string_non_empty(String s, String tag)
+    public boolean check_string_non_empty(String s, String tag)
     {
         if(s.equals(""))
         {
@@ -23,7 +23,7 @@ public class Utils
         return true;
     }
 
-    boolean check_float(String s, String tag)
+    public boolean check_float(String s, String tag)
     {
         float ret;
 
@@ -40,7 +40,7 @@ public class Utils
         return true;
     }
 
-    boolean check_date_greater(String date1, String date2)
+    public boolean check_date_greater(String date1, String date2)
     {
         String[] cur_date_ = date1.split("/");
         String[] end_date_ = date2.split("/");

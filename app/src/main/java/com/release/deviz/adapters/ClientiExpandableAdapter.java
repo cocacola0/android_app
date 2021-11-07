@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,16 +7,20 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_client;
+
 import java.util.ArrayList;
 
 public class ClientiExpandableAdapter extends BaseExpandableListAdapter
 {
     final private Context context;
-    final private ArrayList<data_class_client> list;
+    private ArrayList<data_class_client> list = new ArrayList<>();
 
     public ClientiExpandableAdapter(Context c, ArrayList<data_class_client> list)
     {
         this.context = c;
+
         this.list = list;
     }
 

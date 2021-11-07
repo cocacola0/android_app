@@ -5,7 +5,7 @@
     android:id="@+id/fg_clienti_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fg_clienti">
+    tools:context=".fragments.fg_clienti">
 
     <ExpandableListView
         android:id="@+id/exp_lst_clienti"

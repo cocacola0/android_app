@@ -1,182 +1,200 @@
-package com.release.deviz;
+package com.release.deviz.databaseHandler;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
+
+import com.release.deviz.dataClasses.data_class_client;
+import com.release.deviz.dataClasses.data_class_cont;
+import com.release.deviz.dataClasses.data_class_delegat;
+import com.release.deviz.dataClasses.data_class_facturi;
+import com.release.deviz.dataClasses.data_class_produs;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class MySqlliteDBHandler extends SQLiteOpenHelper
 {
-    String TABLE_PRODUCTS = "produse";
-    String TABLE_CLIENTS = "clienti";
-    String TABLE_CONT = "cont";
-    String TABLE_DELEGATI = "delegati";
-    String TABLE_FACTURI = "facturi";
-
-    String CREATE_TABLE_PRODUCTS = "CREATE TABLE produse(nume text NOT NULL PRIMARY KEY,cod text,pret REAL,img BLOB);";
-    String CREATE_TABLE_CLIENTS = "CREATE TABLE clienti(denumire text PRIMARY KEY,cif text ,reg_com text ,plat_tva BOOLEAN,localitate text,judet text, adresa text, email text, pers_contact text, telefon text);";
-    String CREATE_TABLE_CONT = "CREATE TABLE cont(denumire text PRIMARY KEY,cif text, reg_com text, plat_tva BOOLEAN ,capital_social text, localitate text, judet text, adresa text, cod_postal text, telefon text, email text,cont_bancar text, banca text, cota_tva text, tip_tva text);";
-    String CREATE_TABLE_DELEGATI = "CREATE TABLE delegati(nume_delegat text PRIMARY KEY,cnp_delegat text,ci_delegat text, mij_transport text, nr_delegat text);";
-    String CREATE_TABLE_FACTURI = "CREATE TABLE facturi(nume text NOT NULL,val text NOT NULL,nume_fisier text PRIMARY KEY, factura BOOLEAN);";
-
-
-    String DROP_TABLE_PRODUCTS = "DROP TABLE if exists " + TABLE_PRODUCTS;
-    String DROP_TABLE_CUSTOMERS = "DROP TABLE if exists " + TABLE_CLIENTS;
-    String DROP_TABLE_CONT = "DROP TABLE if exists " + TABLE_CONT;
-    String DROP_TABLE_DELEGATI = "DROP TABLE if exists " + TABLE_DELEGATI;
-    String DROP_TABLE_FACTURI = "DROP TABLE if exists " + TABLE_FACTURI;
-
-    String GET_TABLE_PRODUCTS = "SELECT * from " + TABLE_PRODUCTS;
-    String GET_TABLE_CLIENTS = "SELECT * from " + TABLE_CLIENTS;
-    String GET_TABLE_CONT = "SELECT * from " + TABLE_CONT;
-    String GET_TABLE_DELEGATI = "SELECT * from " + TABLE_DELEGATI;
-    String GET_TABLE_FACTURI = "SELECT * from " + TABLE_FACTURI;
-
-    String GET_TABLE_PRODUCTS_BY_COD = "SELECT * from " + TABLE_PRODUCTS + " WHERE cod=?";
-    String GET_TABLE_CLIENTS_BY_CIF = "SELECT * from " + TABLE_CLIENTS + " WHERE cif=?";
-
-    SQLiteDatabase db;
+    final private SQLiteDatabase db;
+    private sqlCommands commands;
+    private Context c;
     String db_name;
 
     public MySqlliteDBHandler(Context context, String db_name)
     {
         super(context, db_name, null, 1);
-        db = this.getWritableDatabase();
+
         this.db_name = db_name;
+
+        db = this.getWritableDatabase();
+        commands = new sqlCommands();
+        c = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL(CREATE_TABLE_PRODUCTS);
-        db.execSQL(CREATE_TABLE_CLIENTS);
-        db.execSQL(CREATE_TABLE_CONT);
-        db.execSQL(CREATE_TABLE_DELEGATI);
-        db.execSQL(CREATE_TABLE_FACTURI);
+        commands = new sqlCommands();
+
+        switch (db_name)
+        {
+            case "produse":
+                db.execSQL(commands.CREATE_TABLE_PRODUSE);
+                break;
+            case "clienti":
+                db.execSQL(commands.CREATE_TABLE_CLIENTI);
+                break;
+            case "cont":
+                db.execSQL(commands.CREATE_TABLE_CONT);
+                break;
+            case "delegati":
+                db.execSQL(commands.CREATE_TABLE_DELEGATI);
+                break;
+            case "facturi":
+                db.execSQL(commands.CREATE_TABLE_FACTURI);
+                break;
+            default:
+                throw new RuntimeException("Bad command to create a table!");
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        if(db_name.equals("produse"))
-            db.execSQL(DROP_TABLE_PRODUCTS);
-        else
-            if(db_name.equals("clienti"))
-                db.execSQL(DROP_TABLE_CUSTOMERS);
-            else
-                if(db_name.equals("cont"))
-                    db.execSQL(DROP_TABLE_CONT);
-                else
-                    if(db_name.equals("delegati"))
-                        db.execSQL(DROP_TABLE_DELEGATI);
-                    else
-                        if(db_name.equals("facturi"))
-                            db.execSQL(DROP_TABLE_FACTURI);
+        switch (db_name)
+        {
+            case "produse":
+                db.execSQL(commands.DROP_TABLE_PRODUSE);
+                break;
+            case "clienti":
+                db.execSQL(commands.DROP_TABLE_CLIENTI);
+                break;
+            case "cont":
+                db.execSQL(commands.DROP_TABLE_CONT);
+                break;
+            case "delegati":
+                db.execSQL(commands.DROP_TABLE_DELEGATI);
+                break;
+            case "facturi":
+                db.execSQL(commands.DROP_TABLE_FACTURI);
+                break;
+            default:
+                throw new RuntimeException("Bad command to update a table!");
+        }
     }
 
-    public boolean insert_product_data(data_class_produs produs)
+    public boolean insert_data(data_class_produs produs)
     {
-        ContentValues item = new ContentValues();
-        item.put("nume", produs.getNume());
-        item.put("cod", produs.getCod());
-        item.put("pret", produs.getPret());
+        ContentValues item = produs.get_cv();
 
-        if(produs.getImg()!=null)
-            item.put("img", convert_bitmap_to_bytearr(produs.getImg()));
-        else
-            item.put("img", (byte[]) null);
-
-        long result = db.insert("produse", null, item);
+        long result = db.insert(commands.TABLE_PRODUSE, null, item);
 
         return result != -1;
     }
 
-    public boolean insert_client_data(data_class_client client)
+    public boolean insert_data(data_class_client client)
     {
         ContentValues item = client.get_cv();
 
-        long result = db.insert(TABLE_CLIENTS, null, item);
+        long result = db.insert(commands.TABLE_CLIENTI, null, item);
 
         return result != -1;
     }
 
-    public boolean insert_cont_data(data_class_cont cont)
+    public boolean insert_data(data_class_cont cont)
     {
         ContentValues item = cont.get_cv();
 
-        long result = db.insert(TABLE_CONT, null, item);
+        long result = db.insert(commands.TABLE_CONT, null, item);
 
         return result != -1;
     }
 
-    public boolean insert_delegat_data(data_class_delegat delegat)
+    public boolean insert_data(data_class_delegat delegat)
     {
         ContentValues item = delegat.get_cv();
 
-        long result = db.insert(TABLE_DELEGATI, null, item);
+        long result = db.insert(commands.TABLE_DELEGATI, null, item);
 
         return result != -1;
     }
 
-    public boolean insert_facturi_data(data_class_facturi facturi)
+    public boolean insert_data(data_class_facturi facturi)
     {
         ContentValues item = facturi.get_cv();
 
-        long result = db.insert(TABLE_FACTURI, null, item);
+        long result = db.insert(commands.TABLE_FACTURI, null, item);
 
         return result != -1;
     }
-    public boolean delete_product_data(data_class_produs produs)
+
+    public boolean delete_data(data_class_produs produs)
     {
         long result = db.delete("produse", "cod=?", new String[]{produs.getCod()});
 
         return result != -1;
-
     }
 
-    public boolean delete_client_data(data_class_client produs)
+    public boolean delete_data(data_class_facturi facturi)
     {
-        long result = db.delete(TABLE_CLIENTS, "cif=?", new String[]{produs.getCif()});
+        long result = db.delete(commands.TABLE_FACTURI, "nume_fisier=?", new String[]{facturi.getNume_fisier()});
 
         return result != -1;
     }
 
-    public boolean delete_facturi_data(data_class_facturi facturi)
+    public boolean delete_data(data_class_client client)
     {
-        long result = db.delete(TABLE_FACTURI, "nume_fisier=?", new String[]{facturi.getNume_fisier()});
+        long result = db.delete(commands.TABLE_CLIENTI, "cif=?", new String[]{client.getCif()});
 
         return result != -1;
     }
 
-    public boolean modify_product_data(data_class_produs old_prod, data_class_produs new_prod)
+    public boolean modify_data(data_class_produs old_prod, data_class_produs new_prod)
     {
         long result = -1;
+
         if(old_prod == new_prod)
             return true;
 
-        ContentValues new_item = new ContentValues();
-        new_item.put("nume", new_prod.getNume());
-        new_item.put("cod", new_prod.getCod());
-        new_item.put("pret", new_prod.getPret());
-        new_item.put("img", convert_bitmap_to_bytearr(new_prod.getImg()));
-
-        Cursor c = db.rawQuery(GET_TABLE_PRODUCTS_BY_COD,new String[]{old_prod.getCod()}, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_PRODUSE_BY_COD,new String[]{old_prod.getCod()}, null);
+        ContentValues new_item = new_prod.get_cv();
 
         if(c.getCount() > 0)
         {
-            result = db.update("produse", new_item, "cod=?", new String[]{old_prod.getCod()});
+            result = db.update(commands.TABLE_PRODUSE, new_item, "cod=?", new String[]{old_prod.getCod()});
         }
 
         return result != -1;
     }
 
-    public boolean modify_client_data(data_class_client old_prod, data_class_client new_prod)
+    public boolean modify_data(data_class_client old_client, data_class_client new_client)
+    {
+        long result = -1;
+
+        if(old_client == new_client)
+        {
+            return true;
+        }
+
+        ContentValues new_item = new_client.get_cv();
+
+        Cursor c = db.rawQuery(commands.GET_TABLE_CLIENTI_BY_CIF,new String[]{old_client.getCif()}, null);
+
+        if(c.getCount() > 0)
+        {
+            result = db.update(commands.TABLE_CLIENTI, new_item, "cif=?", new String[]{old_client.getCif()});
+        }
+
+        return result != -1;
+    }
+
+    public boolean modify_data(data_class_cont old_prod, data_class_cont new_prod)
     {
         long result = -1;
 
@@ -187,17 +205,17 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
 
         ContentValues new_item = new_prod.get_cv();
 
-        Cursor c = db.rawQuery(GET_TABLE_CLIENTS_BY_CIF,new String[]{old_prod.getCif()}, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_CONT,null, null);
 
         if(c.getCount() > 0)
         {
-            result = db.update(TABLE_CLIENTS, new_item, "cif=?", new String[]{old_prod.getCif()});
+            result = db.update(commands.TABLE_CONT, new_item, "cif=?", new String[]{old_prod.getCif()});
         }
 
         return result != -1;
     }
 
-    public boolean modify_cont_data(data_class_cont old_prod, data_class_cont new_prod)
+    public boolean modify_data(data_class_delegat old_prod, data_class_delegat new_prod)
     {
         long result = -1;
 
@@ -208,64 +226,23 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
 
         ContentValues new_item = new_prod.get_cv();
 
-        Cursor c = db.rawQuery(GET_TABLE_CONT,null, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_DELEGATI,null, null);
 
         if(c.getCount() > 0)
         {
-            result = db.update(TABLE_CONT, new_item, "cif=?", new String[]{old_prod.getCif()});
+            result = db.update(commands.TABLE_DELEGATI, new_item, "cnp_delegat=?", new String[]{old_prod.getCnp()});
         }
 
         return result != -1;
     }
 
-    public boolean modify_delegat_data(data_class_delegat old_prod, data_class_delegat new_prod)
-    {
-        long result = -1;
-
-        if(old_prod == new_prod)
-        {
-            return true;
-        }
-
-        ContentValues new_item = new_prod.get_cv();
-
-        Cursor c = db.rawQuery(GET_TABLE_DELEGATI,null, null);
-
-        if(c.getCount() > 0)
-        {
-            result = db.update(TABLE_DELEGATI, new_item, "cnp_delegat=?", new String[]{old_prod.getCnp()});
-        }
-
-        return result != -1;
-    }
-
-    public boolean check_account_exists()
-    {
-        Cursor c = db.rawQuery(GET_TABLE_CONT,null, null);
-
-        if(c.getCount() > 0)
-            return true;
-        else
-            return false;
-    }
-
-    public boolean check_delegat_exists()
-    {
-        Cursor c = db.rawQuery(GET_TABLE_DELEGATI,null, null);
-
-        if(c.getCount() > 0)
-            return true;
-        else
-            return false;
-    }
-
-    public ArrayList<data_class_produs> get_items_from_table()
+    public ArrayList<data_class_produs> get_items_from_table_produse()
     {
         ArrayList<data_class_produs> list = new ArrayList<>();
 
         data_class_produs item;
 
-        Cursor c = db.rawQuery(GET_TABLE_PRODUCTS,null, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_PRODUSE,null, null);
 
         if (c.moveToFirst())
         {
@@ -295,7 +272,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         ArrayList<data_class_client> list = new ArrayList<>();
         data_class_client item;
 
-        Cursor c = db.rawQuery(GET_TABLE_CLIENTS,null, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_CLIENTI,null, null);
 
         if (c.moveToFirst())
         {
@@ -321,7 +298,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
 
     public data_class_cont get_cont_from_table()
     {
-        Cursor c = db.rawQuery(GET_TABLE_CONT,null, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_CONT,null, null);
 
         if (c.moveToFirst())
         {
@@ -350,7 +327,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
 
     public data_class_delegat get_delegat_from_table()
     {
-        Cursor c = db.rawQuery(GET_TABLE_DELEGATI,null, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_DELEGATI,null, null);
 
         if (c.moveToFirst())
         {
@@ -371,7 +348,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         ArrayList<data_class_facturi> list = new ArrayList<>();
         data_class_facturi item;
 
-        Cursor c = db.rawQuery(GET_TABLE_FACTURI, null, null);
+        Cursor c = db.rawQuery(commands.GET_TABLE_FACTURI, null, null);
 
         if (c.moveToFirst())
         {
@@ -389,12 +366,18 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         return list;
     }
 
-    private byte[] convert_bitmap_to_bytearr(Bitmap img)
+    public boolean check_bool_shared_pref(String key)
     {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        img.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
 
-        return byteArrayOutputStream.toByteArray();
+        return sharedPref.getBoolean(key, false);
+    }
+
+    public void put_bool_shared_pref(String key)
+    {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
+
+        sharedPref.edit().putBoolean(key, true).apply();
     }
 
     private Bitmap convert_bytearr_to_bitmap(byte[] img)

@@ -1,4 +1,4 @@
-package com.release.deviz;
+package com.release.deviz.fragments;
 
 import android.os.Bundle;
 
@@ -13,13 +13,22 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.release.deviz.MainActivity;
+import com.release.deviz.databaseHandler.MySqlliteDBHandler;
+import com.release.deviz.R;
+import com.release.deviz.dataClasses.data_class_client;
+import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
+
 public class fg_adauga_client extends Fragment
 {
     Button b_adauga_client;
     EditText etxt_denumire, etxt_cif, etxt_reg_com, etxt_localitate, etxt_judet, etxt_adresa, etxt_email, etxt_pers_contact, etxt_telefon;
     CheckBox cb_plat_tva_da, cb_plat_tva_nu;
-    boolean plat_tva_da, plat_tva_nu;
 
+    MySqlliteDBHandler sql_db_handler;
+    SharedPrefferencesHandler shared_pref_handler;
+
+    boolean plat_tva_da, plat_tva_nu;
     data_class_client client;
     boolean modifica = false;
 
@@ -56,6 +65,9 @@ public class fg_adauga_client extends Fragment
 
         View r_view = inflater.inflate(R.layout.fg_adauga_client, container, false);
 
+        sql_db_handler = new MySqlliteDBHandler(getContext(), "clienti");
+        shared_pref_handler = new SharedPrefferencesHandler(getContext());
+
         init(r_view);
         b_adauga_client(r_view);
         cb_plat_tva_da(r_view);
@@ -77,18 +89,6 @@ public class fg_adauga_client extends Fragment
         String telefon = etxt_telefon.getText().toString();
 
         return new data_class_client(denumire, cif, reg_com, plat_tva_da, localitate, judetul, adresa, email, pers_contact, telefon);
-        /*
-        Utils u = new Utils(getContext());
-
-        if(u.check_string_non_empty(denumire, "denumire") && u.check_string_non_empty(cif, "cif") &&
-            u.check_string_non_empty(reg_com, "reg_com") && u.check_string_non_empty(localitate, "localitate") &&
-            u.check_string_non_empty(judetul, "judetul") && u.check_string_non_empty(adresa, "adresa") &&
-            u.check_string_non_empty(email, "email") && u.check_string_non_empty(pers_contact, "pers contact") &&
-            u.check_string_non_empty(telefon, "telefon") && (plat_tva_nu || plat_tva_da))
-
-            return new data_class_client(denumire, cif, reg_com, plat_tva_da, localitate, judetul, adresa, email, pers_contact, telefon);
-
-        return null;*/
     }
 
     void b_adauga_client(View r_view)
@@ -113,10 +113,11 @@ public class fg_adauga_client extends Fragment
         if(item != null) {
             MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "clienti");
 
-            boolean succeded = db_handler.insert_client_data(item);
+            boolean succeded = sql_db_handler.insert_data(item);
 
             if (succeded) {
                 Toast.makeText(getContext(), "Inserare reușită!", Toast.LENGTH_SHORT).show();
+                shared_pref_handler.put_bool("clienti");
                 ((MainActivity) getActivity()).start_fg("clienti");
 
             } else
@@ -129,9 +130,7 @@ public class fg_adauga_client extends Fragment
         data_class_client item = get_client_info();
 
         if(item != null) {
-            MySqlliteDBHandler db_handler = new MySqlliteDBHandler(getContext(), "clienti");
-            Log.d("DB", "CALLING");
-            boolean succeded = db_handler.modify_client_data(client, item);
+            boolean succeded = sql_db_handler.modify_data(client, item);
 
             if (succeded) {
                 Toast.makeText(getContext(), "Modificare reușită!", Toast.LENGTH_SHORT).show();
