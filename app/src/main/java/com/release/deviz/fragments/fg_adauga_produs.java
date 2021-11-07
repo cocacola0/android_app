@@ -3,6 +3,8 @@ package com.release.deviz.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -119,6 +121,16 @@ public class fg_adauga_produs extends Fragment
         return r_view;
     }
 
+    public static Bitmap getScaledwonBitmap(Bitmap srcBmp, int deisredWidth, int desiredHeight) {
+
+        Matrix matrix = new Matrix();
+        matrix.setRectToRect(new RectF(0, 0, srcBmp.getWidth(), srcBmp.getHeight()),
+                new RectF(0, 0, deisredWidth, desiredHeight),
+                Matrix.ScaleToFit.CENTER);
+        return Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), srcBmp.getHeight(), matrix, true);
+
+    }
+
     private data_class_produs get_produs_info()
     {
         String nume = etxt_nume.getText().toString();
@@ -137,6 +149,8 @@ public class fg_adauga_produs extends Fragment
             {
                 drawable = (BitmapDrawable) img_produs.getDrawable();
                 bitmap = drawable.getBitmap();
+
+                bitmap = getScaledwonBitmap(bitmap, 1080, 2160);
             }
             else
                 bitmap = null;

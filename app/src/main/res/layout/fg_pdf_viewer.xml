@@ -7,11 +7,15 @@
     android:orientation="vertical"
     tools:context=".fragments.fg_pdf_viewer">
 
-    <ImageView
-        android:layout_above="@id/ll_buttons_pdf_viewer"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/img_pdf_view"/>
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_above="@id/ll_buttons_pdf_viewer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/img_pdf_view"/>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/ll_buttons_pdf_viewer"

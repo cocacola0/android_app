@@ -2,6 +2,8 @@ package com.release.deviz.dataClasses;
 
 import android.content.ContentValues;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 
 import java.io.ByteArrayOutputStream;
 
@@ -11,6 +13,9 @@ public class data_class_produs
     private float pret;
 
     private Bitmap img;
+
+    static int max_img_width = 1500;
+    static int max_img_height = 900;
 
     public data_class_produs(String nume, String cod, float pret, Bitmap img)
     {
@@ -26,7 +31,26 @@ public class data_class_produs
         this.nume = produs.nume;
         this.cod = produs.cod;
         this.pret = produs.pret;
-        this.img = produs.img;
+
+        this.img = getScaledwonBitmap(produs.img);
+    }
+
+    public static Bitmap getScaledwonBitmap(Bitmap srcBmp) {
+        int width = srcBmp.getWidth();
+        int height = srcBmp.getHeight();
+
+        if(height > max_img_height) {
+            width = width * max_img_height / height;
+            height = max_img_height;
+        }
+
+        Matrix matrix = new Matrix();
+        matrix.setRectToRect(new RectF(0, 0, srcBmp.getWidth(), srcBmp.getHeight()),
+                new RectF(0, 0, width, height),
+                Matrix.ScaleToFit.CENTER);
+
+        return Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), srcBmp.getHeight(), matrix, true);
+
     }
 
     public Bitmap getResizedBitmap(int maxSize) {
@@ -51,7 +75,7 @@ public class data_class_produs
             height = maxSize;
             width = (int) (height * bitmapRatio);
         }
-        return Bitmap.createScaledBitmap(img, 40, 36, true);
+        return Bitmap.createScaledBitmap(img, 400, 360, true);
     }
 
     public String getNume()
