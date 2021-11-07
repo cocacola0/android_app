@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_above="@id/btn_adauga_produs"
         android:id="@+id/ll_edtxt_produs">
 
         <EditText
@@ -53,12 +54,10 @@
             android:maxHeight="500dp"
             android:minHeight="300dp"
             android:id="@+id/imgw_prod"/>
-
     </LinearLayout>
 
-
-
     <Button
+        android:background="@color/white"
         android:id="@+id/btn_adauga_produs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

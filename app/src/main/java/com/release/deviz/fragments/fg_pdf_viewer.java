@@ -164,8 +164,7 @@ public class fg_pdf_viewer extends Fragment
         PdfRenderer.Page page = null;
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
 
-        for(int nr_pages = 0; nr_pages < pdfRenderer.getPageCount(); nr_pages++)
-        {
+        for (int nr_pages = 0; nr_pages < pdfRenderer.getPageCount(); nr_pages++) {
             page = pdfRenderer.openPage(nr_pages);
 
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -178,7 +177,11 @@ public class fg_pdf_viewer extends Fragment
             page.close();
         }
 
-        img.setImageBitmap(combineImageIntoOneFlexWidth(bitmaps));
+        if(bitmaps.size() == 1)
+            img.setImageBitmap(bitmaps.get(0));
+        else
+            img.setImageBitmap(combineImageIntoOneFlexWidth(bitmaps));
+
         pdfRenderer.close();
     }
 }

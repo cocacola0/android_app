@@ -129,8 +129,7 @@ public class fg_produse extends Fragment
         });
     }
 
-    private void lst_view(View r_view)
-    {
+    private void lst_view(View r_view) {
         lst_view = r_view.findViewById(R.id.lst_prod_produse);
 
         list = sql_db_handler.get_items_from_table_produse();
@@ -139,27 +138,21 @@ public class fg_produse extends Fragment
 
         lst_view.setAdapter(adapter);
 
-        lst_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lst_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                if(previous_selected != null)
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (previous_selected != null)
                     previous_selected.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-                if(previous_selected == view)
-                {
+                if (previous_selected == view) {
                     view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     previous_selected = null;
                     selected_index = -1;
-                }
-                else
-                {
+                } else {
                     view.setBackgroundColor(Color.parseColor("#ADD8E6"));
                     previous_selected = view;
                     selected_index = position;
                 }
-
-                return true;
             }
         });
     }
