@@ -2,7 +2,6 @@
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,14 +17,13 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.release.deviz.dataClasses.data_class_client;
 import com.release.deviz.dataClasses.data_class_cont;
 import com.release.deviz.dataClasses.data_class_delegat;
 import com.release.deviz.dataClasses.data_class_facturi;
-import com.release.deviz.dataClasses.data_class_produs_pdf;
+import com.release.deviz.dataClasses.data_class_extended_produs;
 
 
     public class Facturare
@@ -36,7 +34,7 @@ import com.release.deviz.dataClasses.data_class_produs_pdf;
     data_class_client client_info;
     data_class_cont cont_info;
     data_class_delegat delegat_info;
-    ArrayList<data_class_produs_pdf> produse;
+    ArrayList<data_class_extended_produs> produse;
 
     public data_class_facturi output_factura_info;
 
@@ -47,7 +45,7 @@ import com.release.deviz.dataClasses.data_class_produs_pdf;
     float tot_tva = 0;
 
     //Oferta
-    public Facturare(Context c,String doc_name, data_class_client client_info, data_class_cont cont_info, ArrayList<data_class_produs_pdf> produse)
+    public Facturare(Context c,String doc_name, data_class_client client_info, data_class_cont cont_info, ArrayList<data_class_extended_produs> produse)
     {
         this.context = c;
 
@@ -63,7 +61,7 @@ import com.release.deviz.dataClasses.data_class_produs_pdf;
         generatePdfDocument();
     }
 
-    public Facturare(Context c,String doc_name, data_class_client client_info, data_class_cont cont_info, data_class_delegat delegat_info, ArrayList<data_class_produs_pdf> produse, int nr_factura)
+    public Facturare(Context c, String doc_name, data_class_client client_info, data_class_cont cont_info, data_class_delegat delegat_info, ArrayList<data_class_extended_produs> produse, int nr_factura)
     {
         this.context = c;
 

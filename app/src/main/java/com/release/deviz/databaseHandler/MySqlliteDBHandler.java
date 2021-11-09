@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import com.release.deviz.dataClasses.data_class_client;
 import com.release.deviz.dataClasses.data_class_cont;
 import com.release.deviz.dataClasses.data_class_delegat;
+import com.release.deviz.dataClasses.data_class_extended_produs;
 import com.release.deviz.dataClasses.data_class_facturi;
 import com.release.deviz.dataClasses.data_class_produs;
 
@@ -234,6 +235,38 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         }
 
         return result != -1;
+    }
+
+    public ArrayList<data_class_extended_produs> get_extended_items_from_table_produse()
+    {
+        ArrayList<data_class_extended_produs> list = new ArrayList<>();
+
+        data_class_extended_produs item;
+
+        Cursor c = db.rawQuery(commands.GET_TABLE_PRODUSE,null, null);
+
+        if (c.moveToFirst())
+        {
+            do
+            {
+                String nume = (c.getString(c.getColumnIndex("nume")));
+                String cod = (c.getString(c.getColumnIndex("cod")));
+                float pret = (c.getFloat(c.getColumnIndex("pret")));
+
+                Bitmap img;
+
+                if(c.getBlob(c.getColumnIndex("img"))!= null)
+                    img = convert_bytearr_to_bitmap(c.getBlob(c.getColumnIndex("img")));
+                else
+                    img = null;
+
+                item = new data_class_extended_produs(new data_class_produs(nume, cod, pret, img),1);
+
+                list.add(item);
+            }while(c.moveToNext());
+        }
+
+        return list;
     }
 
     public ArrayList<data_class_produs> get_items_from_table_produse()

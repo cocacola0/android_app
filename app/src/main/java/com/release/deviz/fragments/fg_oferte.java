@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.release.deviz.adapters.ClientiOferteAdapter;
 import com.release.deviz.MainActivity;
+import com.release.deviz.dataClasses.util_functions_produs;
 import com.release.deviz.databaseHandler.MySqlliteDBHandler;
 import com.release.deviz.adapters.ProduseOferteAdapter;
 import com.release.deviz.R;
@@ -23,7 +25,7 @@ import com.release.deviz.dataClasses.data_class_client;
 import com.release.deviz.dataClasses.data_class_cont;
 import com.release.deviz.dataClasses.data_class_delegat;
 import com.release.deviz.dataClasses.data_class_produs;
-import com.release.deviz.dataClasses.data_class_produs_pdf;
+import com.release.deviz.dataClasses.data_class_extended_produs;
 import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
 import com.release.deviz.generateDocument.Facturare;
 
@@ -36,18 +38,19 @@ public class fg_oferte extends Fragment
     Spinner sp_clienti, sp_produse;
     ListView lst_clienti, lst_produse;
 
-    ArrayList<data_class_client> clienti, curr_clienti;
-    ArrayList<data_class_produs> produse, curr_produse;
-
-    ArrayList<String> clienti_nume, produse_nume;
-    ArrayList<Integer> bucati = new ArrayList<>();
+    ArrayList<data_class_client> free_clienti, used_clienti;
+    ArrayList<data_class_extended_produs> free_produse, used_produse;
 
     ClientiOferteAdapter clienti_adapter;
     ProduseOferteAdapter produse_adapter;
-    ArrayAdapter<CharSequence> cl_sp_adapter;
+
+    ArrayAdapter<String> sp_adapter_clienti;
+    ArrayAdapter<String> sp_adapter_produse;
 
     SharedPrefferencesHandler shared_pref_handler;
     MySqlliteDBHandler sql_db_handler;
+
+    util_functions_produs util_produs;
 
     Button b_trimite;
 
@@ -88,6 +91,7 @@ public class fg_oferte extends Fragment
         View r_view = inflater.inflate(R.layout.fg_oferte, container, false);
 
         shared_pref_handler = new SharedPrefferencesHandler(getContext());
+        util_produs = new util_functions_produs();
 
         if(check_exits()) {
             init(r_view);
@@ -123,13 +127,10 @@ public class fg_oferte extends Fragment
     void get_data_from_db()
     {
         sql_db_handler = new MySqlliteDBHandler(getContext(), "produse");
-        produse = sql_db_handler.get_items_from_table_produse();
+        free_produse = sql_db_handler.get_extended_items_from_table_produse();
 
         sql_db_handler = new MySqlliteDBHandler(getContext(), "clienti");
-        clienti = sql_db_handler.get_items_from_table_clients();
-
-        clienti_nume = get_clienti_nume();
-        produse_nume = get_produse_nume();
+        free_clienti = sql_db_handler.get_items_from_table_clients();
     }
 
     boolean check_exits()
@@ -168,72 +169,55 @@ public class fg_oferte extends Fragment
         return true;
     }
 
-    ArrayList<String> get_clienti_nume()
+    void insert_item_in_clienti_listview(int pos)
     {
-        ArrayList<String> list = new ArrayList<>();
+        data_class_client new_client = free_clienti.get(pos);
 
-        for(int i=0; i<clienti.size(); i++)
-            list.add(clienti.get(i).getDenumire());
+        if(!used_clienti.contains(new_client))
+        {
+            used_clienti.add(free_clienti.get(pos));
+            free_clienti.remove(pos);
 
-        return list;
-    }
-
-    ArrayList<String> get_produse_nume()
-    {
-        ArrayList<String> list = new ArrayList<>();
-
-        for(int i=0; i<produse.size(); i++)
-            list.add(produse.get(i).getNume());
-
-        return list;
-    }
-
-    void insert_item_in_client_listview(int pos)
-    {
-        if(pos==0)
-            return;
-
-        String nume = cl_sp_adapter.getItem(pos).toString();
-        int position = pos;
-        for(int i=0; i<clienti.size(); i++)
-            if(nume.equals(clienti.get(i).getDenumire())) {
-                position = i;
-                break;
-            }
-
-        if(!curr_clienti.contains(clienti.get(position))) {
-            curr_clienti.add(clienti.get(position));
             clienti_adapter.notifyDataSetChanged();
-
-            cl_sp_adapter.remove(clienti.get(position).getDenumire());
-            sp_clienti.setSelection(0);
-            cl_sp_adapter.notifyDataSetChanged();
         }
     }
 
     void insert_item_in_products_listview(int pos)
     {
-        if(!curr_produse.contains(produse.get(pos))) {
-            bucati.add(1);
-            curr_produse.add(produse.get(pos));
+        data_class_extended_produs new_prod = free_produse.get(pos);
+
+        if(!used_produse.contains(new_prod))
+        {
+            used_produse.add(free_produse.get(pos));
+            free_produse.remove(pos);
+
             produse_adapter.notifyDataSetChanged();
         }
     }
 
     void init_spinner_cl()
     {
-        cl_sp_adapter = new ArrayAdapter<CharSequence>(getContext(), android.R.layout.simple_spinner_item);
+        sp_adapter_clienti = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item);
 
-        cl_sp_adapter.add("Selectează");
-        cl_sp_adapter.addAll(clienti_nume);
-        cl_sp_adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        sp_clienti.setAdapter(cl_sp_adapter);
+        sp_adapter_clienti.add("Selectează");
+        sp_adapter_clienti.addAll(util_produs.getListNume_client(free_clienti));
+        sp_adapter_clienti.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        sp_clienti.setAdapter(sp_adapter_clienti);
 
         sp_clienti.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                insert_item_in_client_listview(position);
+                if (position != 0)
+                {
+                    sp_adapter_clienti.remove(free_clienti.get(position - 1).getDenumire());
+                    sp_adapter_clienti.notifyDataSetChanged();
+
+                    insert_item_in_clienti_listview(position - 1);
+
+                    sp_clienti.setSelection(0);
+                }
             }
 
             @Override
@@ -245,20 +229,28 @@ public class fg_oferte extends Fragment
 
     void init_spinner_pr()
     {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item);
+        sp_adapter_produse = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item);
 
-        adapter.add("Selectează");
-        adapter.addAll(produse_nume);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        sp_produse.setAdapter(adapter);
+        sp_adapter_produse.add("Selectează");
+        sp_adapter_produse.addAll(util_produs.getListNume_prod(free_produse));
+        sp_adapter_produse.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        sp_produse.setAdapter(sp_adapter_produse);
 
         sp_produse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position != 0)
-                    insert_item_in_products_listview(position-1);
+                if(view != null) {
+                    if (position != 0)
+                    {
+                        sp_adapter_produse.remove(free_produse.get(position - 1).getNume());
+                        sp_adapter_produse.notifyDataSetChanged();
 
-                sp_produse.setSelection(0);
+                        insert_item_in_products_listview(position - 1);
+
+                        sp_produse.setSelection(0);
+                    }
+                }
             }
 
             @Override
@@ -270,8 +262,8 @@ public class fg_oferte extends Fragment
 
     void init_lst_cl()
     {
-        curr_clienti = new ArrayList<data_class_client>();
-        clienti_adapter = new ClientiOferteAdapter(getContext(), curr_clienti);
+        used_clienti = new ArrayList<data_class_client>();
+        clienti_adapter = new ClientiOferteAdapter(getContext(), used_clienti);
 
         lst_clienti.setAdapter(clienti_adapter);
 
@@ -281,46 +273,44 @@ public class fg_oferte extends Fragment
             {
                 if(view.getId() == R.id.of_cl_img)
                 {
-                    cl_sp_adapter.add(curr_clienti.get(position).getDenumire());
-                    curr_clienti.remove(position);
-                }
+                    data_class_client client = used_clienti.get(position);
 
-                clienti_adapter.notifyDataSetChanged();
+                    sp_adapter_clienti.insert(client.getDenumire(), 1);
+                    free_clienti.add(client);
+
+                    used_clienti.remove(position);
+
+                    clienti_adapter.notifyDataSetChanged();
+                    sp_adapter_clienti.notifyDataSetChanged();
+                }
             }
         });
     }
 
     void init_lst_pr()
     {
-        curr_produse = new ArrayList<data_class_produs>();
-        produse_adapter = new ProduseOferteAdapter(getContext(), curr_produse, bucati, factura);
+        used_produse = new ArrayList<data_class_extended_produs>();
+
+        produse_adapter = new ProduseOferteAdapter(getContext(), used_produse);
+
         lst_produse.setAdapter(produse_adapter);
 
         lst_produse.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int nr_buc = bucati.get(position);
-
-                if(view.getId() == R.id.of_prod_img_minus)
+                if(view.getId() == R.id.of_prod_delete)
                 {
-                    if(nr_buc == 1)
-                    {
-                        bucati.remove(position);
-                        curr_produse.remove(position);
-                        produse_adapter.notifyDataSetChanged();
-                    }
-                    else
-                    {
-                        bucati.set(position, nr_buc-1);
-                    }
-                }
-                else
-                    if(view.getId() == R.id.of_prod_img_add) {
-                        bucati.set(position, nr_buc + 1);
-                    }
+                    data_class_extended_produs prod = used_produse.get(position);
 
-                produse_adapter.notifyDataSetChanged();
+                    sp_adapter_produse.insert(prod.getNume(), 1);
+                    free_produse.add(prod);
+
+                    used_produse.remove(position);
+
+                    produse_adapter.notifyDataSetChanged();
+                    sp_adapter_produse.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -331,26 +321,21 @@ public class fg_oferte extends Fragment
             @Override
             public void onClick(View v)
             {
-                if(curr_clienti.size() == 0)
-                {
-                    Toast.makeText(getContext(), "Introduceți produse!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(curr_produse.size() == 0)
+                if(used_clienti.size() == 0)
                 {
                     Toast.makeText(getContext(), "Introduceți clienti!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                ArrayList<data_class_produs_pdf> list_produse = new ArrayList<>();
-
-                for(int i = 0; i<curr_produse.size(); i++)
-                    list_produse.add(new data_class_produs_pdf(curr_produse.get((i)),bucati.get(i)));
-
-                for(data_class_client client:curr_clienti)
+                if(used_produse.size() == 0)
                 {
-                    launch_factura(list_produse, client);
+                    Toast.makeText(getContext(), "Introduceți produse!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                for(data_class_client client:used_clienti)
+                {
+                    launch_factura(client);
                 }
             }
         });
@@ -366,7 +351,7 @@ public class fg_oferte extends Fragment
 
     }
 
-    void launch_factura(ArrayList<data_class_produs_pdf> list_produse, data_class_client client)
+    void launch_factura(data_class_client client)
     {
         sql_db_handler = new MySqlliteDBHandler(getContext(), "cont");
         data_class_cont cont = sql_db_handler.get_cont_from_table();
@@ -374,14 +359,14 @@ public class fg_oferte extends Fragment
 
         Facturare f;
         if(!factura){
-            f = new Facturare(getContext(), doc_name, client, cont, list_produse);
+            f = new Facturare(getContext(), doc_name, client, cont, used_produse);
         }
         else {
             sql_db_handler = new MySqlliteDBHandler(getContext(), "delegati");
             data_class_delegat delegat = sql_db_handler.get_delegat_from_table();
             int nr_factura = shared_pref_handler.check_int("nr_factura");
 
-            f = new Facturare(getContext(), doc_name, client, cont, delegat, list_produse, nr_factura);
+            f = new Facturare(getContext(), doc_name, client, cont, delegat, used_produse, nr_factura);
 
             shared_pref_handler.iterate_int("nr_factura");
         }

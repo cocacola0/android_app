@@ -9,12 +9,15 @@ import com.release.deviz.dataClasses.data_class_produs;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class data_class_produs_pdf extends data_class_produs
+/*
+Extends data_class_produs with nr_buc
+ */
+public class data_class_extended_produs extends data_class_produs
 {
     private data_class_produs produs;
     private int nr_buc;
 
-    public data_class_produs_pdf(data_class_produs produs, int nr_buc)
+    public data_class_extended_produs(data_class_produs produs, int nr_buc)
     {
         super(produs);
 
@@ -25,6 +28,11 @@ public class data_class_produs_pdf extends data_class_produs
     public int getNr_buc()
     {
         return nr_buc;
+    }
+
+    public void setNr_buc(int new_value)
+    {
+        nr_buc = new_value;
     }
     public float getPretCuTva()
     {

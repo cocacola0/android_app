@@ -14,6 +14,9 @@ import com.release.deviz.dataClasses.data_class_client;
 
 import java.util.ArrayList;
 
+/*
+Adapter for Clienti in spinner in fragment Oferta/Factura
+ */
 public class ClientiOferteAdapter extends BaseAdapter
 {
     final private Context context;
