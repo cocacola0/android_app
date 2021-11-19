@@ -45,7 +45,6 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity{
     public DrawerLayout d;
     NavigationView n;
-    public ActionBarDrawerToggle toggle;
     Toolbar t;
     String PREF_FILE= "MyPref";
     boolean inactive = false;
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity{
                 change_toolbar(R.string.app_name);
         }
 
-        transaction.addToBackStack(null).commit();
+        transaction.addToBackStack("current-123").commit();
     }
 
     public void start_fg_with_args(String fg_name, data_class_produs prod)

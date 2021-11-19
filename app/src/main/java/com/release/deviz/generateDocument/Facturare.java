@@ -422,7 +422,7 @@ import com.release.deviz.dataClasses.data_class_extended_produs;
 
         paragraph.add(table);
 
-        output_factura_info = new data_class_facturi(client_info.getDenumire(), Float.toString(tot_pret_cu_tva),  doc_name, factura);
+        output_factura_info = new data_class_facturi(client_info.getDenumire(), Float.toString(tot_pret_cu_tva),  doc_name, factura, produse);
 
         return paragraph;
     }

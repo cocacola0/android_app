@@ -103,21 +103,6 @@ public class data_class_produs
         this.nume = nume;
     }
 
-    public void setCod(String cod)
-    {
-        this.cod = cod;
-    }
-
-    public void setPret(float pret)
-    {
-        this.pret = pret;
-    }
-
-    public void setImg(Bitmap img)
-    {
-        this.img = img;
-    }
-
     public ContentValues get_cv()
     {
         ContentValues item = new ContentValues();

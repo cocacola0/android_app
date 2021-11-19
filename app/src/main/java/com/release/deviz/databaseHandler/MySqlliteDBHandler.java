@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 
+import com.release.deviz.Utils;
 import com.release.deviz.dataClasses.data_class_client;
 import com.release.deviz.dataClasses.data_class_cont;
 import com.release.deviz.dataClasses.data_class_delegat;
@@ -18,13 +19,15 @@ import com.release.deviz.dataClasses.data_class_facturi;
 import com.release.deviz.dataClasses.data_class_produs;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.sql.Blob;
 import java.util.ArrayList;
 
 public class MySqlliteDBHandler extends SQLiteOpenHelper
 {
     final private SQLiteDatabase db;
     private sqlCommands commands;
-    private Context c;
+    final private Context c;
     String db_name;
 
     public MySqlliteDBHandler(Context context, String db_name)
@@ -126,8 +129,7 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
         return result != -1;
     }
 
-    public boolean insert_data(data_class_facturi facturi)
-    {
+    public boolean insert_data(data_class_facturi facturi) throws IOException {
         ContentValues item = facturi.get_cv();
 
         long result = db.insert(commands.TABLE_FACTURI, null, item);
@@ -390,27 +392,14 @@ public class MySqlliteDBHandler extends SQLiteOpenHelper
                 String val = (c.getString(c.getColumnIndex("val")));
                 String nume_fisier = (c.getString(c.getColumnIndex("nume_fisier")));
                 boolean factura = (c.getInt(c.getColumnIndex("factura")) > 0);
+                String produse = (c.getString(c.getColumnIndex("produse")));
 
-                item = new data_class_facturi(nume, val, nume_fisier, factura);
+                item = new data_class_facturi(nume, val, nume_fisier, factura, produse);
                 list.add(item);
             }while (c.moveToNext());
         }
 
         return list;
-    }
-
-    public boolean check_bool_shared_pref(String key)
-    {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
-
-        return sharedPref.getBoolean(key, false);
-    }
-
-    public void put_bool_shared_pref(String key)
-    {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
-
-        sharedPref.edit().putBoolean(key, true).apply();
     }
 
     private Bitmap convert_bytearr_to_bitmap(byte[] img)

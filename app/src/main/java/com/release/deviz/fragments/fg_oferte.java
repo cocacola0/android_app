@@ -29,6 +29,7 @@ import com.release.deviz.dataClasses.data_class_extended_produs;
 import com.release.deviz.databaseHandler.SharedPrefferencesHandler;
 import com.release.deviz.generateDocument.Facturare;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,8 +81,23 @@ public class fg_oferte extends Fragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
+        if(savedInstanceState != null)
+            if(savedInstanceState.containsKey("argument"))
+                Log.d("Argument check", savedInstanceState.getString("argument"));
+            else
+                Log.d("Argument check", "missing");
+
+
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        outState.putString("argument","argument");
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -335,7 +351,11 @@ public class fg_oferte extends Fragment
 
                 for(data_class_client client:used_clienti)
                 {
-                    launch_factura(client);
+                    try {
+                        launch_factura(client);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -351,8 +371,7 @@ public class fg_oferte extends Fragment
 
     }
 
-    void launch_factura(data_class_client client)
-    {
+    void launch_factura(data_class_client client) throws IOException {
         sql_db_handler = new MySqlliteDBHandler(getContext(), "cont");
         data_class_cont cont = sql_db_handler.get_cont_from_table();
         String doc_name = get_name_from_current_time();

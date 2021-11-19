@@ -8,13 +8,14 @@ import com.release.deviz.dataClasses.data_class_produs;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 /*
 Extends data_class_produs with nr_buc
  */
-public class data_class_extended_produs extends data_class_produs
+public class data_class_extended_produs extends data_class_produs implements Serializable
 {
-    private data_class_produs produs;
+    final private data_class_produs produs;
     private int nr_buc;
 
     public data_class_extended_produs(data_class_produs produs, int nr_buc)

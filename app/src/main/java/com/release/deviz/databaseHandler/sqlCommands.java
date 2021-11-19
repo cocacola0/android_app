@@ -12,7 +12,7 @@ public class sqlCommands
     String CREATE_TABLE_CLIENTI = "CREATE TABLE " + TABLE_CLIENTI + "(denumire text PRIMARY KEY,cif text ,reg_com text ,plat_tva BOOLEAN,localitate text,judet text, adresa text, email text, pers_contact text, telefon text);";
     String CREATE_TABLE_CONT = "CREATE TABLE " + TABLE_CONT + "(denumire text PRIMARY KEY,cif text, reg_com text, plat_tva BOOLEAN ,capital_social text, localitate text, judet text, adresa text, cod_postal text, telefon text, email text,cont_bancar text, banca text, cota_tva text, tip_tva text);";
     String CREATE_TABLE_DELEGATI = "CREATE TABLE " + TABLE_DELEGATI + "(nume_delegat text PRIMARY KEY,cnp_delegat text,ci_delegat text, mij_transport text, nr_delegat text);";
-    String CREATE_TABLE_FACTURI = "CREATE TABLE " + TABLE_FACTURI + "(nume text NOT NULL,val text NOT NULL,nume_fisier text PRIMARY KEY, factura BOOLEAN);";
+    String CREATE_TABLE_FACTURI = "CREATE TABLE " + TABLE_FACTURI + "(nume text NOT NULL,val text NOT NULL,nume_fisier text PRIMARY KEY, factura BOOLEAN, produse text);";
 
 
     String DROP_TABLE_PRODUSE = "DROP TABLE if exists " + TABLE_PRODUSE;

@@ -3,11 +3,11 @@ package com.release.deviz.databaseHandler;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class SharedPrefferencesHandler
 {
-    private SharedPreferences sharedPref;
-    Context c;
+    private final SharedPreferences sharedPref;
 
     public SharedPrefferencesHandler(Context context)
     {
@@ -17,6 +17,9 @@ public class SharedPrefferencesHandler
 
     public boolean check_bool(String key)
     {
+        Log.d("PULA", key);
+        Log.d("PULA", String.valueOf(sharedPref.getBoolean(key, false)));
+
         return sharedPref.getBoolean(key, false);
     }
 
@@ -27,6 +30,7 @@ public class SharedPrefferencesHandler
 
     public void put_bool(String key)
     {
+        Log.d("PENIS", key);
         sharedPref.edit().putBoolean(key, true).apply();
     }
 
