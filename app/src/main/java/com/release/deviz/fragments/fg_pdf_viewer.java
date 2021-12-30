@@ -70,7 +70,6 @@ public class fg_pdf_viewer extends Fragment
         img = r_view.findViewById(R.id.img_pdf_view);
 
         btn_sterge = r_view.findViewById(R.id.btn_fac_sterge);
-        btn_salveaza = r_view.findViewById(R.id.btn_fac_salveaza);
         btn_trimite = r_view.findViewById(R.id.btn_fac_trimite);
 
         btn_sterge.setOnClickListener(new View.OnClickListener() {
@@ -78,13 +77,6 @@ public class fg_pdf_viewer extends Fragment
             public void onClick(View v) {
                 boolean result = sql_db_handler.delete_data(factura);
                 ((MainActivity) getActivity()).start_fg("rapoarte");
-            }
-        });
-
-        btn_salveaza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).start_fg("acasa");
             }
         });
 

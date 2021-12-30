@@ -233,8 +233,7 @@ public class MainActivity extends AppCompatActivity{
                 transaction.replace(R.id.layout_frame, fg_acasa.class, null);
                 change_toolbar(R.string.app_name);
         }
-
-        transaction.addToBackStack("current-123").commit();
+        transaction.addToBackStack(null).commit();
     }
 
     public void start_fg_with_args(String fg_name, data_class_produs prod)

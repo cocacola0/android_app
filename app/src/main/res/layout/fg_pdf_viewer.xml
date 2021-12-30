@@ -21,28 +21,18 @@
         android:id="@+id/ll_buttons_pdf_viewer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3"
+        android:weightSum="2"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
-
         <Button
             android:id="@+id/btn_fac_sterge"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Șterge"
+            android:text="@string/sterge"
             android:textSize="12sp"
             android:padding="10dip"
-            android:layout_margin="10dp"/>
-
-        <Button
-            android:id="@+id/btn_fac_salveaza"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Salvează"
-            android:textSize="12sp"
-            android:padding="10dip"
+            android:minHeight="60dp"
             android:layout_margin="10dp"/>
 
         <Button
@@ -50,11 +40,10 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Trimite"
+            android:text="@string/trimite"
             android:textSize="12sp"
             android:padding="10dip"
+            android:minHeight="60dp"
             android:layout_margin="10dp"/>
     </LinearLayout>
-
-
 </RelativeLayout>

@@ -91,6 +91,12 @@
     <string name="text_4">Puteți adăuga produse din pagina "Produse". Pentru fiecare produs trebuie specificat: numele, codul, preț și imagine.</string>
     <string name="text_5">Puteți adăuga clienți din pagina "Clienți". Pentru fiecare client trebuie specificat: denumirea, cif-ul, reg-comul, plătitor tva(da sau nu), localitatea, județul, adresa, email-ul, persoana de contact, numărul de telefon.</string>
     <string name="title_activity_abonamente">activity_abonamente</string>
+
+    <!--rapoarte-->
+    <string name="vezi">Vezi document</string>
+    <string name="sterge">Șterge document</string>
+    <string name="trimite">Trimite document</string>
+    <string name="modifica">Modifică document</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

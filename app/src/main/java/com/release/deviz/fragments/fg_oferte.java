@@ -36,6 +36,8 @@ import java.util.Date;
 
 public class fg_oferte extends Fragment
 {
+    private View r_view;
+
     Spinner sp_clienti, sp_produse;
     ListView lst_clienti, lst_produse;
 
@@ -83,11 +85,14 @@ public class fg_oferte extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        if(savedInstanceState != null)
-            if(savedInstanceState.containsKey("argument"))
+        if(savedInstanceState != null) {
+            if (savedInstanceState.containsKey("argument"))
                 Log.d("Argument check", savedInstanceState.getString("argument"));
             else
                 Log.d("Argument check", "missing");
+        }
+        else
+            Log.d("Argument check", "null");
 
 
         super.onCreate(savedInstanceState);
@@ -96,15 +101,19 @@ public class fg_oferte extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
-        outState.putString("argument","argument");
         super.onSaveInstanceState(outState);
+        Log.d("Argument check", "pula");
+        outState.putString("argument","argument");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View r_view = inflater.inflate(R.layout.fg_oferte, container, false);
+        if(r_view == null)
+            r_view = inflater.inflate(R.layout.fg_oferte, container, false);
+        else
+            Log.d("Am reusit", "TARE");
 
         shared_pref_handler = new SharedPrefferencesHandler(getContext());
         util_produs = new util_functions_produs();
@@ -360,6 +369,7 @@ public class fg_oferte extends Fragment
             }
         });
     }
+    
     String get_name_from_current_time()
     {
         String pattern = "dd_MM_yyyy_hh_mm_ss";

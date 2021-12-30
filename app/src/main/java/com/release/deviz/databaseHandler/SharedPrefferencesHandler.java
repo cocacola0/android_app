@@ -17,9 +17,6 @@ public class SharedPrefferencesHandler
 
     public boolean check_bool(String key)
     {
-        Log.d("PULA", key);
-        Log.d("PULA", String.valueOf(sharedPref.getBoolean(key, false)));
-
         return sharedPref.getBoolean(key, false);
     }
 
